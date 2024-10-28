@@ -64,4 +64,7 @@ dependencies {
 
     // Timber for Logging
     implementation(libs.timber)
+
+    // Result Kotlin
+    implementation(libs.kotlin.result)
 }
