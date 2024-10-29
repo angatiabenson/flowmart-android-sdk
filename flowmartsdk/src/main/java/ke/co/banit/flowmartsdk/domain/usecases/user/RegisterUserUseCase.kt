@@ -1,11 +1,13 @@
 package ke.co.banit.flowmartsdk.domain.usecases.user
 
-import ke.co.banit.flowmartsdk.domain.models.User
+import ke.co.banit.flowmartsdk.data.models.response.user.RegisterUserResponse
 import ke.co.banit.flowmartsdk.domain.repositories.UserRepository
-import ke.co.banit.flowmartsdk.domain.util.Result
 import ke.co.banit.flowmartsdk.domain.util.isEmailValid
 import ke.co.banit.flowmartsdk.domain.util.isPasswordStrong
 import ke.co.banit.flowmartsdk.domain.util.isPhoneValid
+import ke.co.banit.flowmartsdk.util.Result
+import ke.co.banit.flowmartsdk.util.handleResult
+import ke.co.banit.flowmartsdk.util.runCatchingResult
 
 
 /**
@@ -32,12 +34,14 @@ class RegisterUserUseCase(private val repository: UserRepository) {
         email: String,
         phone: String,
         password: String
-    ): Result<User, Exception> {
+    ): Result<RegisterUserResponse, Exception> {
         if (name.isBlank()) return Result.Error(Exception("Name cannot be blank"))
         if (!isEmailValid(email)) return Result.Error(Exception("Invalid email format"))
         if (!isPhoneValid(phone)) return Result.Error(Exception("Invalid phone number format"))
         if (!isPasswordStrong(password)) return Result.Error(Exception("Password must be at least 8 characters, contain a number, an uppercase letter, and a special character"))
 
-        return repository.registerUser(name, email, phone, password)
+        return runCatchingResult {
+            repository.registerUser(name, email, phone, password)
+        }.handleResult()
     }
 }

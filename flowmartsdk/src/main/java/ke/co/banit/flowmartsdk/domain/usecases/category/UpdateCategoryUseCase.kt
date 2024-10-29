@@ -1,8 +1,10 @@
 package ke.co.banit.flowmartsdk.domain.usecases.category
 
-import ke.co.banit.flowmartsdk.domain.models.Category
+import ke.co.banit.flowmartsdk.data.models.response.category.UpdateCategoryResponse
 import ke.co.banit.flowmartsdk.domain.repositories.CategoryRepository
-import ke.co.banit.flowmartsdk.domain.util.Result
+import ke.co.banit.flowmartsdk.util.Result
+import ke.co.banit.flowmartsdk.util.handleResult
+import ke.co.banit.flowmartsdk.util.runCatchingResult
 
 /**
  * @Author: Angatia Benson
@@ -11,7 +13,9 @@ import ke.co.banit.flowmartsdk.domain.util.Result
  */
 
 class UpdateCategoryUseCase(private val categoryRepository: CategoryRepository) {
-    suspend operator fun invoke(id: Int, name: String): Result<Category> {
-        return categoryRepository.updateCategory(id, name)
+    suspend operator fun invoke(id: Int, name: String): Result<UpdateCategoryResponse, Exception> {
+        return runCatchingResult {
+            categoryRepository.updateCategory(id, name)
+        }.handleResult()
     }
 }

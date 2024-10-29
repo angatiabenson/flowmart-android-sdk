@@ -1,7 +1,10 @@
 package ke.co.banit.flowmartsdk.domain.usecases.product
 
+import ke.co.banit.flowmartsdk.data.models.response.product.DeleteProductResponse
 import ke.co.banit.flowmartsdk.domain.repositories.ProductRepository
-import ke.co.banit.flowmartsdk.domain.util.Result
+import ke.co.banit.flowmartsdk.util.Result
+import ke.co.banit.flowmartsdk.util.handleResult
+import ke.co.banit.flowmartsdk.util.runCatchingResult
 
 /**
  * @Author: Angatia Benson
@@ -19,7 +22,9 @@ class DeleteProductUseCase(private val repository: ProductRepository) {
      * @param id The unique identifier of the product to delete.
      * @return Result<Unit, Exception> - A result wrapping a success unit or an exception on failure.
      */
-    suspend operator fun invoke(id: Int): Result<Unit, Exception> {
-        return repository.deleteProduct(id)
+    suspend operator fun invoke(id: Int): Result<DeleteProductResponse, Exception> {
+        return runCatchingResult {
+            repository.deleteProduct(id)
+        }.handleResult()
     }
 }

@@ -1,4 +1,4 @@
-package ke.co.banit.flowmartsdk.domain.util
+package ke.co.banit.flowmartsdk.util
 
 /**
  * @Author: Angatia Benson

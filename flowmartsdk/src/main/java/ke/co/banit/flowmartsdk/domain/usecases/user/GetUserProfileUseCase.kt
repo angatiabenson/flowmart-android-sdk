@@ -1,8 +1,10 @@
 package ke.co.banit.flowmartsdk.domain.usecases.user
 
-import ke.co.banit.flowmartsdk.domain.models.User
+import ke.co.banit.flowmartsdk.data.models.response.user.UserProfileResponse
 import ke.co.banit.flowmartsdk.domain.repositories.UserRepository
-import ke.co.banit.flowmartsdk.domain.util.Result
+import ke.co.banit.flowmartsdk.util.Result
+import ke.co.banit.flowmartsdk.util.handleResult
+import ke.co.banit.flowmartsdk.util.runCatchingResult
 
 /**
  * @Author: Angatia Benson
@@ -19,7 +21,9 @@ class GetUserProfileUseCase(private val repository: UserRepository) {
      * Executes the use case to retrieve the user profile.
      * @return Result<User, Exception> - A result wrapping the user profile or an exception on failure.
      */
-    suspend operator fun invoke(): Result<User, Exception> {
-        return repository.getUserProfile()
+    suspend operator fun invoke(): Result<UserProfileResponse, Exception> {
+        return runCatchingResult {
+            repository.getUserProfile()
+        }.handleResult()
     }
 }

@@ -1,13 +1,11 @@
-package ke.co.banit.flowmartsdk.domain.models
+package ke.co.banit.flowmartsdk.data.models.dto
 
 /**
  * @Author: Angatia Benson
  * @Date: 10/28/2024
  * Copyright (c) 2024 BanIT
  */
-data class Product(
+data class Category(
     val id: Int,
-    val categoryId: Int,
     val name: String,
-    val quantity: Int,
 )

@@ -1,8 +1,10 @@
 package ke.co.banit.flowmartsdk.domain.usecases.product
 
-import ke.co.banit.flowmartsdk.domain.models.Product
+import ke.co.banit.flowmartsdk.data.models.response.product.UpdateProductResponse
 import ke.co.banit.flowmartsdk.domain.repositories.ProductRepository
-import ke.co.banit.flowmartsdk.domain.util.Result
+import ke.co.banit.flowmartsdk.util.Result
+import ke.co.banit.flowmartsdk.util.handleResult
+import ke.co.banit.flowmartsdk.util.runCatchingResult
 
 /**
  * @Author: Angatia Benson
@@ -23,7 +25,13 @@ class UpdateProductUseCase(private val repository: ProductRepository) {
      * @param quantity The updated quantity of the product.
      * @return Result<Product, Exception> - A result wrapping the updated product or an exception on failure.
      */
-    suspend operator fun invoke(id: Int, name: String, quantity: Int): Result<Product, Exception> {
-        return repository.updateProduct(id, name, quantity)
+    suspend operator fun invoke(
+        id: Int,
+        name: String,
+        quantity: Int
+    ): Result<UpdateProductResponse, Exception> {
+        return runCatchingResult {
+            repository.updateProduct(id, name, quantity)
+        }.handleResult()
     }
 }

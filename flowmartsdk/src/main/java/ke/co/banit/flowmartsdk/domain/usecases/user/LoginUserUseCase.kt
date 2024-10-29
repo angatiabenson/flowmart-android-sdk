@@ -1,8 +1,11 @@
 package ke.co.banit.flowmartsdk.domain.usecases.user
 
+import ke.co.banit.flowmartsdk.data.models.response.user.LoginUserResponse
 import ke.co.banit.flowmartsdk.domain.repositories.UserRepository
-import ke.co.banit.flowmartsdk.domain.util.Result
 import ke.co.banit.flowmartsdk.domain.util.isEmailValid
+import ke.co.banit.flowmartsdk.util.Result
+import ke.co.banit.flowmartsdk.util.handleResult
+import ke.co.banit.flowmartsdk.util.runCatchingResult
 
 
 /**
@@ -22,10 +25,15 @@ class LoginUserUseCase(private val repository: UserRepository) {
      * @param password The password of the user.
      * @return Result<String, Exception> - A result wrapping the API token or an exception on failure.
      */
-    suspend operator fun invoke(email: String, password: String): Result<String, Exception> {
+    suspend operator fun invoke(
+        email: String,
+        password: String
+    ): Result<LoginUserResponse, Exception> {
         if (!isEmailValid(email)) return Result.Error(Exception("Invalid email format"))
         if (password.isBlank()) return Result.Error(Exception("Password cannot be blank"))
 
-        return repository.loginUser(email, password)
+        return runCatchingResult {
+            repository.loginUser(email, password)
+        }.handleResult()
     }
 }

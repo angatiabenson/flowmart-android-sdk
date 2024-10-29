@@ -1,8 +1,10 @@
 package ke.co.banit.flowmartsdk.domain.usecases.product
 
-import ke.co.banit.flowmartsdk.domain.models.Product
+import ke.co.banit.flowmartsdk.data.models.response.product.CreateProductResponse
 import ke.co.banit.flowmartsdk.domain.repositories.ProductRepository
-import ke.co.banit.flowmartsdk.domain.util.Result
+import ke.co.banit.flowmartsdk.util.Result
+import ke.co.banit.flowmartsdk.util.handleResult
+import ke.co.banit.flowmartsdk.util.runCatchingResult
 
 /**
  * @Author: Angatia Benson
@@ -26,7 +28,9 @@ class CreateProductUseCase(private val repository: ProductRepository) {
         categoryId: Int,
         name: String,
         quantity: Int
-    ): Result<Product, Exception> {
-        return repository.createProduct(categoryId, name, quantity)
+    ): Result<CreateProductResponse, Exception> {
+        return runCatchingResult {
+            repository.createProduct(categoryId, name, quantity)
+        }.handleResult()
     }
 }

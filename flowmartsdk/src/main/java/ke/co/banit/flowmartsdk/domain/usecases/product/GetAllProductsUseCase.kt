@@ -1,8 +1,10 @@
 package ke.co.banit.flowmartsdk.domain.usecases.product
 
-import ke.co.banit.flowmartsdk.domain.models.Product
+import ke.co.banit.flowmartsdk.data.models.response.product.ProductsListResponse
 import ke.co.banit.flowmartsdk.domain.repositories.ProductRepository
-import ke.co.banit.flowmartsdk.domain.util.Result
+import ke.co.banit.flowmartsdk.util.Result
+import ke.co.banit.flowmartsdk.util.handleResult
+import ke.co.banit.flowmartsdk.util.runCatchingResult
 
 /**
  * @Author: Angatia Benson
@@ -19,7 +21,9 @@ class GetAllProductsUseCase(private val repository: ProductRepository) {
      * Executes the use case to retrieve all products.
      * @return Result<List<Product>, Exception> - A result wrapping a list of products or an exception on failure.
      */
-    suspend operator fun invoke(): Result<List<Product>, Exception> {
-        return repository.getAllProducts()
+    suspend operator fun invoke(): Result<ProductsListResponse, Exception> {
+        return runCatchingResult {
+            repository.getAllProducts()
+        }.handleResult()
     }
 }

@@ -1,7 +1,10 @@
 package ke.co.banit.flowmartsdk.domain.usecases.category
 
+import ke.co.banit.flowmartsdk.data.models.response.category.DeleteCategoryResponse
 import ke.co.banit.flowmartsdk.domain.repositories.CategoryRepository
-import ke.co.banit.flowmartsdk.domain.util.Result
+import ke.co.banit.flowmartsdk.util.Result
+import ke.co.banit.flowmartsdk.util.handleResult
+import ke.co.banit.flowmartsdk.util.runCatchingResult
 
 /**
  * @Author: Angatia Benson
@@ -10,7 +13,9 @@ import ke.co.banit.flowmartsdk.domain.util.Result
  */
 
 class DeleteCategoryUseCase(private val categoryRepository: CategoryRepository) {
-    suspend operator fun invoke(id: Int): Result<Unit> {
-        return categoryRepository.deleteCategory(id)
+    suspend operator fun invoke(id: Int): Result<DeleteCategoryResponse, Exception> {
+        return runCatchingResult {
+            categoryRepository.deleteCategory(id)
+        }.handleResult()
     }
 }

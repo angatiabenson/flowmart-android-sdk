@@ -1,4 +1,6 @@
-package ke.co.banit.flowmartsdk.domain.models
+package ke.co.banit.flowmartsdk.data.models.dto
+
+import com.squareup.moshi.Json
 
 /**
  * @Author: Angatia Benson
@@ -10,4 +12,5 @@ data class User(
     val name: String,
     val email: String,
     val phone: String,
+    @Json(name = "created_at") val createdAt: String
 )

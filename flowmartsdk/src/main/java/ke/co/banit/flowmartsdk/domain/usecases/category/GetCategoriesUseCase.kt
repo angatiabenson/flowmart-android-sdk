@@ -1,8 +1,10 @@
 package ke.co.banit.flowmartsdk.domain.usecases.category
 
-import ke.co.banit.flowmartsdk.domain.models.Category
+import ke.co.banit.flowmartsdk.data.models.response.category.CategoriesListResponse
 import ke.co.banit.flowmartsdk.domain.repositories.CategoryRepository
-import ke.co.banit.flowmartsdk.domain.util.Result
+import ke.co.banit.flowmartsdk.util.Result
+import ke.co.banit.flowmartsdk.util.handleResult
+import ke.co.banit.flowmartsdk.util.runCatchingResult
 
 /**
  * @Author: Angatia Benson
@@ -11,7 +13,9 @@ import ke.co.banit.flowmartsdk.domain.util.Result
  */
 
 class GetCategoriesUseCase(private val categoryRepository: CategoryRepository) {
-    suspend operator fun invoke(): Result<List<Category>> {
-        return categoryRepository.getAllCategories()
+    suspend operator fun invoke(): Result<CategoriesListResponse, Exception> {
+        return runCatchingResult {
+            categoryRepository.getAllCategories()
+        }.handleResult()
     }
 }
