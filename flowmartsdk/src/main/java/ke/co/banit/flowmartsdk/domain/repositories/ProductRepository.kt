@@ -10,9 +10,14 @@ import ke.co.banit.flowmartsdk.domain.util.Result
  */
 
 interface ProductRepository {
-    suspend fun getAllProducts(): Result<List<Product>>
-    suspend fun createProduct(categoryId: Int, name: String, quantity: Int): Result<Product>
-    suspend fun getProductsByCategory(categoryId: Int): Result<List<Product>>
-    suspend fun updateProduct(id: Int, name: String, quantity: Int): Result<Product>
-    suspend fun deleteProduct(id: Int): Result<Unit>
+    suspend fun getAllProducts(): Result<List<Product>, Exception>
+    suspend fun createProduct(
+        categoryId: Int,
+        name: String,
+        quantity: Int
+    ): Result<Product, Exception>
+
+    suspend fun getProductsByCategory(categoryId: Int): Result<List<Product>, Exception>
+    suspend fun updateProduct(id: Int, name: String, quantity: Int): Result<Product, Exception>
+    suspend fun deleteProduct(id: Int): Result<Unit, Exception>
 }

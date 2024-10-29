@@ -1,6 +1,7 @@
 package ke.co.banit.flowmartsdk.domain.repositories
 
 import ke.co.banit.flowmartsdk.domain.models.User
+import ke.co.banit.flowmartsdk.domain.util.Result
 
 /**
  * @Author: Angatia Benson
@@ -8,9 +9,25 @@ import ke.co.banit.flowmartsdk.domain.models.User
  * Copyright (c) 2024 BanIT
  */
 interface UserRepository {
-    suspend fun registerUser(name: String, email: String, phone: String, password: String): Result<User>
-    suspend fun loginUser(email: String, password: String): Result<String> // Returns API token
-    suspend fun getUserProfile(): Result<User>
-    suspend fun updateUserProfile(name: String?, email: String?, phone: String?, password: String?): Result<User>
-    suspend fun deleteUserAccount(): Result<Unit>
+    suspend fun registerUser(
+        name: String,
+        email: String,
+        phone: String,
+        password: String
+    ): Result<User, Exception>
+
+    suspend fun loginUser(
+        email: String,
+        password: String
+    ): Result<String, Exception> // Returns API token
+
+    suspend fun getUserProfile(): Result<User, Exception>
+    suspend fun updateUserProfile(
+        name: String?,
+        email: String?,
+        phone: String?,
+        password: String?
+    ): Result<User, Exception>
+
+    suspend fun deleteUserAccount(): Result<Unit, Exception>
 }

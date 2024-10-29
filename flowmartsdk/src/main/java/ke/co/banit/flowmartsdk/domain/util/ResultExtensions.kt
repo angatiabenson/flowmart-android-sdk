@@ -5,63 +5,58 @@ package ke.co.banit.flowmartsdk.domain.util
  * @Date: 10/28/2024
  * Copyright (c) 2024 BanIT
  */
-
 /**
- * Executes the given block and returns a Result object.
+ * Transforms the successful value using the provided [map] function.
  *
- * @param block The block to execute.
- * @return Result.Success with the block's result or Result.Error if an exception is thrown.
+ * @param R The type of the transformed result.
+ * @param map The function to transform the successful data.
+ * @return A new [Result] containing the transformed data or the original error.
  */
-inline fun <T> runCatchingResult(block: () -> T): Result<T> {
-    return try {
-        Result.Success(block())
-    } catch (e: Throwable) {
-        Result.Error(e)
-    }
-}
-
-/**
- * Transforms the successful value using the given transform function.
- *
- * @param transform The function to apply to the successful value.
- * @return A new Result with the transformed value or the original error.
- */
-inline fun <T, R> Result<T>.map(transform: (T) -> R): Result<R> {
+inline fun <T, E : Exception, R> Result<T, E>.map(map: (T) -> R): Result<R, E> {
     return when (this) {
-        is Result.Success -> Result.Success(transform(this.data))
-        is Result.Error -> this
+        is Result.Error -> Result.Error(error)
+        is Result.Success -> Result.Success(map(data))
     }
 }
 
 /**
- * Executes the given transform function on the successful value and returns a new Result.
+ * Converts a [Result] with data into a [EmptyResult], ignoring the data.
  *
- * @param transform The function to apply to the successful value.
- * @return The transformed Result or the original error.
+ * @return A new [EmptyResult] representing the same success or error state.
  */
-inline fun <T, R> Result<T>.flatMap(transform: (T) -> Result<R>): Result<R> {
+fun <T, E : Exception> Result<T, E>.asEmptyDataResult(): EmptyResult<E> {
+    return map { }
+}
+
+/**
+ * Executes the given [action] if the [Result] is a [Success].
+ *
+ * @param action The lambda to execute with the successful data.
+ * @return The original [Result] after executing the action.
+ */
+inline fun <T, E : Exception> Result<T, E>.onSuccess(action: (T) -> Unit): Result<T, E> {
     return when (this) {
-        is Result.Success -> transform(this.data)
         is Result.Error -> this
+        is Result.Success -> {
+            action(data)
+            this
+        }
     }
 }
 
 /**
- * Executes the given action if the Result is a success.
+ * Executes the given [action] if the [Result] is an [Error].
  *
- * @param action The action to execute with the successful value.
+ * @param action The lambda to execute with the error exception.
+ * @return The original [Result] after executing the action.
  */
-inline fun <T> Result<T>.onSuccess(action: (T) -> Unit): Result<T> {
-    if (this is Result.Success) action(this.data)
-    return this
-}
+inline fun <T, E : Exception> Result<T, E>.onError(action: (E) -> Unit): Result<T, E> {
+    return when (this) {
+        is Result.Error -> {
+            action(error)
+            this
+        }
 
-/**
- * Executes the given action if the Result is an error.
- *
- * @param action The action to execute with the exception.
- */
-inline fun <T> Result<T>.onError(action: (Throwable) -> Unit): Result<T> {
-    if (this is Result.Error) action(this.exception)
-    return this
+        is Result.Success -> this
+    }
 }

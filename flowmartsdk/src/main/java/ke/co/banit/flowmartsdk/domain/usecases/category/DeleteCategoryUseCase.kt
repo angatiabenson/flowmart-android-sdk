@@ -1,6 +1,5 @@
 package ke.co.banit.flowmartsdk.domain.usecases.category
 
-import ke.co.banit.flowmartsdk.domain.models.Category
 import ke.co.banit.flowmartsdk.domain.repositories.CategoryRepository
 import ke.co.banit.flowmartsdk.domain.util.Result
 
@@ -11,7 +10,7 @@ import ke.co.banit.flowmartsdk.domain.util.Result
  */
 
 class DeleteCategoryUseCase(private val categoryRepository: CategoryRepository) {
-    suspend operator fun invoke(id:Int): Result<Unit> {
+    suspend operator fun invoke(id: Int): Result<Unit> {
         return categoryRepository.deleteCategory(id)
     }
 }
