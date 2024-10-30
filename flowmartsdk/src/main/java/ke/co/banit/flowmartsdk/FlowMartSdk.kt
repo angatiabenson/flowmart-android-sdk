@@ -14,6 +14,11 @@ import ke.co.banit.flowmartsdk.data.models.response.user.LoginUserResponse
 import ke.co.banit.flowmartsdk.data.models.response.user.RegisterUserResponse
 import ke.co.banit.flowmartsdk.data.models.response.user.UpdateUserProfileResponse
 import ke.co.banit.flowmartsdk.data.models.response.user.UserProfileResponse
+import ke.co.banit.flowmartsdk.data.remote.ApiClient
+import ke.co.banit.flowmartsdk.data.remote.okhttp.AuthInterceptor
+import ke.co.banit.flowmartsdk.data.repositories.CategoryRepositoryImpl
+import ke.co.banit.flowmartsdk.data.repositories.ProductRepositoryImpl
+import ke.co.banit.flowmartsdk.data.repositories.UserRepositoryImpl
 import ke.co.banit.flowmartsdk.domain.usecases.category.CreateCategoryUseCase
 import ke.co.banit.flowmartsdk.domain.usecases.category.DeleteCategoryUseCase
 import ke.co.banit.flowmartsdk.domain.usecases.category.GetCategoriesUseCase
@@ -28,138 +33,76 @@ import ke.co.banit.flowmartsdk.domain.usecases.user.GetUserProfileUseCase
 import ke.co.banit.flowmartsdk.domain.usecases.user.LoginUserUseCase
 import ke.co.banit.flowmartsdk.domain.usecases.user.RegisterUserUseCase
 import ke.co.banit.flowmartsdk.domain.usecases.user.UpdateUserProfileUseCase
+import ke.co.banit.flowmartsdk.util.FlowMartConfiguration
 import ke.co.banit.flowmartsdk.util.Result
-import javax.inject.Inject
-import javax.inject.Singleton
+import ke.co.banit.flowmartsdk.util.Settings
 
 /**
  * @Author: Angatia Benson
  * @Date: 10/29/2024
  * Copyright (c) 2024 BanIT
  */
-
-/**
- * The core SDK class providing access to FlowMart API functionalities.
- *
- * @property getCategoriesUseCase The use case for retrieving categories.
- * @property createCategoryUseCase The use case for creating a new category.
- * @property updateCategoryUseCase The use case for updating an existing category.
- * @property deleteCategoryUseCase The use case for deleting a category.
- * @property getAllProductsUseCase The use case for retrieving products.
- * @property getProductsByCategoryUseCase The use case for retrieving products by category.
- * @property createProductUseCase The use case for creating a new product.
- * @property updateProductUseCase The use case for updating a product.
- * @property deleteProductUseCase The use case for deleting a product.
- * @property registerUserUseCase The use case for registering a new user.
- * @property loginUserUseCase The use case for logging in a user.
- * @property getUserProfileUseCase The use case for retrieving the user profile.
- * @property updateUserProfileUseCase The use case for updating the user profile.
- * @property deleteUserAccountUseCase The use case for deleting a user account.
- */
-@Singleton
-class FlowMartSdk @Inject constructor(
-    private val getCategoriesUseCase: GetCategoriesUseCase,
-    private val createCategoryUseCase: CreateCategoryUseCase,
-    private val updateCategoryUseCase: UpdateCategoryUseCase,
-    private val deleteCategoryUseCase: DeleteCategoryUseCase,
-    private val getAllProductsUseCase: GetAllProductsUseCase,
-    private val getProductsByCategoryUseCase: GetProductsByCategoryUseCase,
-    private val createProductUseCase: CreateProductUseCase,
-    private val updateProductUseCase: UpdateProductUseCase,
-    private val deleteProductUseCase: DeleteProductUseCase,
-    private val registerUserUseCase: RegisterUserUseCase,
-    private val loginUserUseCase: LoginUserUseCase,
-    private val getUserProfileUseCase: GetUserProfileUseCase,
-    private val updateUserProfileUseCase: UpdateUserProfileUseCase,
-    private val deleteUserAccountUseCase: DeleteUserAccountUseCase
+class FlowMartSdk private constructor(
+    private val getCategoriesUseCase: Lazy<GetCategoriesUseCase>,
+    private val createCategoryUseCase: Lazy<CreateCategoryUseCase>,
+    private val updateCategoryUseCase: Lazy<UpdateCategoryUseCase>,
+    private val deleteCategoryUseCase: Lazy<DeleteCategoryUseCase>,
+    private val getAllProductsUseCase: Lazy<GetAllProductsUseCase>,
+    private val getProductsByCategoryUseCase: Lazy<GetProductsByCategoryUseCase>,
+    private val createProductUseCase: Lazy<CreateProductUseCase>,
+    private val updateProductUseCase: Lazy<UpdateProductUseCase>,
+    private val deleteProductUseCase: Lazy<DeleteProductUseCase>,
+    private val registerUserUseCase: Lazy<RegisterUserUseCase>,
+    private val loginUserUseCase: Lazy<LoginUserUseCase>,
+    private val getUserProfileUseCase: Lazy<GetUserProfileUseCase>,
+    private val updateUserProfileUseCase: Lazy<UpdateUserProfileUseCase>,
+    private val deleteUserAccountUseCase: Lazy<DeleteUserAccountUseCase>
 ) {
-
-    /**
-     * The authentication token (API key) used for authenticated API requests.
-     * This should be set during SDK initialization.
-     */
-    @Volatile
-    private var apiKey: String? = null
-
-    /**
-     * Initializes the SDK with the provided API key.
-     *
-     * @param apiKey The API key for authenticated requests.
-     */
-    fun initialize(apiKey: String) {
-        this.apiKey = apiKey
-    }
-
-    /**
-     * Sets the API key manually.
-     *
-     * Useful if the API key is obtained from an external source or needs to be updated.
-     *
-     * @param apiKey The API key to set.
-     */
-    fun setApiKey(apiKey: String) {
-        this.apiKey = apiKey
-    }
-
-    /**
-     * Clears the API key, e.g., on logout.
-     */
-    fun clearApiKey() {
-        this.apiKey = null
-    }
-
-    /**
-     * Retrieves the current API key.
-     *
-     * @return The API key if set, null otherwise.
-     */
-    fun getApiKey(): String? = apiKey
-
     // Category Methods
     suspend fun getCategories(): Result<CategoriesListResponse, Exception> {
-        return getCategoriesUseCase()
+        return getCategoriesUseCase.value.invoke()
     }
 
     suspend fun createCategory(name: String): Result<CreateCategoryResponse, Exception> {
-        return createCategoryUseCase(name)
+        return createCategoryUseCase.value.invoke(name)
     }
 
     suspend fun updateCategory(id: Int, name: String): Result<UpdateCategoryResponse, Exception> {
-        return updateCategoryUseCase(id, name)
+        return updateCategoryUseCase.value.invoke(id, name)
     }
 
     suspend fun deleteCategory(id: Int): Result<DeleteCategoryResponse, Exception> {
-        return deleteCategoryUseCase(id)
+        return deleteCategoryUseCase.value.invoke(id)
     }
 
     // Product Methods
     suspend fun getProducts(): Result<ProductsListResponse, Exception> {
-        return getAllProductsUseCase()
-
+        return getAllProductsUseCase.value.invoke()
     }
 
     suspend fun getProductsByCategory(categoryId: Int): Result<ProductsByCategoryResponse, Exception> {
-        return getProductsByCategoryUseCase(categoryId)
+        return getProductsByCategoryUseCase.value.invoke(categoryId)
     }
 
     suspend fun createProduct(
         categoryId: Int,
         name: String,
-        quantity: Int
+        quantity: String
     ): Result<CreateProductResponse, Exception> {
-        return createProductUseCase(categoryId, name, quantity)
+        return createProductUseCase.value.invoke(categoryId, name, quantity)
     }
 
     suspend fun updateProduct(
-        id: Int,
+        productId: Int,
+        categoryId: Int,
         name: String,
-        quantity: Int
+        quantity: String
     ): Result<UpdateProductResponse, Exception> {
-        return updateProductUseCase(id, name, quantity)
+        return updateProductUseCase.value.invoke(productId, categoryId, name, quantity)
     }
 
     suspend fun deleteProduct(id: Int): Result<DeleteProductResponse, Exception> {
-        return deleteProductUseCase(id)
+        return deleteProductUseCase.value.invoke(id)
     }
 
     // User Methods
@@ -169,24 +112,15 @@ class FlowMartSdk @Inject constructor(
         phone: String,
         password: String
     ): Result<RegisterUserResponse, Exception> {
-        return registerUserUseCase(name, email, phone, password)
+        return registerUserUseCase.value.invoke(name, email, phone, password)
     }
 
-    /**
-     * Logs in a user with the provided credentials.
-     *
-     * On successful login, the [apiKey] is set for authenticated requests.
-     *
-     * @param email The user's email.
-     * @param password The user's password.
-     * @return A [Result] containing the API key on success or an exception on failure.
-     */
     suspend fun loginUser(email: String, password: String): Result<LoginUserResponse, Exception> {
-        return loginUserUseCase(email, password)
+        return loginUserUseCase.value.invoke(email, password)
     }
 
     suspend fun getUserProfile(): Result<UserProfileResponse, Exception> {
-        return getUserProfileUseCase()
+        return getUserProfileUseCase.value.invoke()
     }
 
     suspend fun updateUserProfile(
@@ -195,10 +129,90 @@ class FlowMartSdk @Inject constructor(
         phone: String?,
         password: String?
     ): Result<UpdateUserProfileResponse, Exception> {
-        return updateUserProfileUseCase(name, email, phone, password)
+        return updateUserProfileUseCase.value.invoke(name, email, phone, password)
     }
 
     suspend fun deleteUserAccount(): Result<DeleteUserResponse, Exception> {
-        return deleteUserAccountUseCase()
+        return deleteUserAccountUseCase.value.invoke()
+    }
+
+
+    class Builder {
+
+        private var configuration: FlowMartConfiguration? = null
+        private lateinit var interceptor: AuthInterceptor
+
+        private fun setupInterceptor() {
+            interceptor = AuthInterceptor(configuration?.apiKey!!)
+        }
+
+        private fun <T, R : Any> createRepository(
+            serviceCreator: (String, AuthInterceptor) -> T,
+            repositoryFactory: (T) -> R
+        ): R {
+            val baseUrl = configuration?.baseUrl ?: Settings.BASE_URL
+            val service = serviceCreator(baseUrl, interceptor)
+            return repositoryFactory(service)
+        }
+
+        fun configure(configuration: FlowMartConfiguration): Builder =
+            apply {
+                this.configuration = configuration
+                setupInterceptor()
+            }
+
+        fun build(): FlowMartSdk {
+            // Initialize Repositories
+            val categoryRepository = createRepository(
+                serviceCreator = ApiClient::getCategoryAPIService,
+                repositoryFactory = ::CategoryRepositoryImpl
+            )
+            val productRepository = createRepository(
+                serviceCreator = ApiClient::getProductAPIService,
+                repositoryFactory = ::ProductRepositoryImpl
+            )
+
+            val userRepository = createRepository(
+                serviceCreator = ApiClient::getUserAPIService,
+                repositoryFactory = ::UserRepositoryImpl
+            )
+
+            // Initialize Use Cases
+            val getCategoriesUseCase = GetCategoriesUseCase(categoryRepository)
+            val createCategoryUseCase = CreateCategoryUseCase(categoryRepository)
+            val updateCategoryUseCase = UpdateCategoryUseCase(categoryRepository)
+            val deleteCategoryUseCase = DeleteCategoryUseCase(categoryRepository)
+
+            val getAllProductsUseCase = GetAllProductsUseCase(productRepository)
+            val getProductsByCategoryUseCase = GetProductsByCategoryUseCase(productRepository)
+            val createProductUseCase = CreateProductUseCase(productRepository)
+            val updateProductUseCase = UpdateProductUseCase(productRepository)
+            val deleteProductUseCase = DeleteProductUseCase(productRepository)
+
+            val registerUserUseCase = RegisterUserUseCase(userRepository)
+            val loginUserUseCase = LoginUserUseCase(userRepository)
+            val getUserProfileUseCase = GetUserProfileUseCase(userRepository)
+            val updateUserProfileUseCase = UpdateUserProfileUseCase(userRepository)
+            val deleteUserAccountUseCase = DeleteUserAccountUseCase(userRepository)
+
+            val flowMartSdk = FlowMartSdk(
+                getCategoriesUseCase = lazy { getCategoriesUseCase },
+                createCategoryUseCase = lazy { createCategoryUseCase },
+                updateCategoryUseCase = lazy { updateCategoryUseCase },
+                deleteCategoryUseCase = lazy { deleteCategoryUseCase },
+                getAllProductsUseCase = lazy { getAllProductsUseCase },
+                getProductsByCategoryUseCase = lazy { getProductsByCategoryUseCase },
+                createProductUseCase = lazy { createProductUseCase },
+                updateProductUseCase = lazy { updateProductUseCase },
+                deleteProductUseCase = lazy { deleteProductUseCase },
+                registerUserUseCase = lazy { registerUserUseCase },
+                loginUserUseCase = lazy { loginUserUseCase },
+                getUserProfileUseCase = lazy { getUserProfileUseCase },
+                updateUserProfileUseCase = lazy { updateUserProfileUseCase },
+                deleteUserAccountUseCase = lazy { deleteUserAccountUseCase }
+            )
+
+            return flowMartSdk
+        }
     }
 }

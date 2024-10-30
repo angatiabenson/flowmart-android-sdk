@@ -4,7 +4,6 @@ import com.squareup.moshi.Moshi
 import ke.co.banit.flowmartsdk.data.remote.api.CategoryApiService
 import ke.co.banit.flowmartsdk.data.remote.api.ProductApiService
 import ke.co.banit.flowmartsdk.data.remote.api.UserApiService
-import ke.co.banit.flowmartsdk.domain.repositories.CategoryRepository
 import ke.co.banit.flowmartsdk.util.Settings
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -20,12 +19,18 @@ import java.util.concurrent.TimeUnit
  */
 object ApiClient {
 
-    fun getCategoryAPIService(interceptor: Interceptor): CategoryApiService = getRetrofit(interceptor).create(CategoryApiService::class.java)
-    fun getProductAPIService(interceptor: Interceptor): ProductApiService = getRetrofit(interceptor).create(ProductApiService::class.java)
-    fun getUserAPIService(interceptor: Interceptor): UserApiService = getRetrofit(interceptor).create(UserApiService::class.java)
+    fun getCategoryAPIService(baseUrl: String, interceptor: Interceptor): CategoryApiService =
+        getRetrofit(baseUrl, interceptor).create(CategoryApiService::class.java)
 
-    private fun getRetrofit(interceptor: Interceptor): Retrofit {
-        val httpLoggingInterceptor = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
+    fun getProductAPIService(baseUrl: String, interceptor: Interceptor): ProductApiService =
+        getRetrofit(baseUrl, interceptor).create(ProductApiService::class.java)
+
+    fun getUserAPIService(baseUrl: String, interceptor: Interceptor): UserApiService =
+        getRetrofit(baseUrl, interceptor).create(UserApiService::class.java)
+
+    private fun getRetrofit(baseUrl: String, interceptor: Interceptor): Retrofit {
+        val httpLoggingInterceptor =
+            HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
         val builder = OkHttpClient.Builder()
         val client = builder.connectTimeout(Settings.CONNECT_TIMEOUT, TimeUnit.SECONDS)
             .writeTimeout(Settings.WRITE_TIMEOUT, TimeUnit.SECONDS)
@@ -34,7 +39,7 @@ object ApiClient {
             .addInterceptor(interceptor)
             .build()
         return Retrofit.Builder()
-            .baseUrl(Settings.BASE_URL)
+            .baseUrl(baseUrl)
             .addConverterFactory(MoshiConverterFactory.create(Moshi.Builder().build()))
             .client(client)
             .build()

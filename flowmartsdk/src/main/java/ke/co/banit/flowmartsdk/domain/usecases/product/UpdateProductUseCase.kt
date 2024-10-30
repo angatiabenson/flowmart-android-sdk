@@ -26,12 +26,13 @@ class UpdateProductUseCase(private val repository: ProductRepository) {
      * @return Result<Product, Exception> - A result wrapping the updated product or an exception on failure.
      */
     suspend operator fun invoke(
-        id: Int,
+        productId: Int,
+        categoryId: Int,
         name: String,
-        quantity: Int
+        quantity: String
     ): Result<UpdateProductResponse, Exception> {
         return runCatchingResult {
-            repository.updateProduct(id, name, quantity)
+            repository.updateProduct(productId, categoryId, name, quantity)
         }.handleResult()
     }
 }

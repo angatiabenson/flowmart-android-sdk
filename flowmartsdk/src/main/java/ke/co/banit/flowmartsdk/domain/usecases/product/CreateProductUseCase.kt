@@ -27,7 +27,7 @@ class CreateProductUseCase(private val repository: ProductRepository) {
     suspend operator fun invoke(
         categoryId: Int,
         name: String,
-        quantity: Int
+        quantity: String
     ): Result<CreateProductResponse, Exception> {
         return runCatchingResult {
             repository.createProduct(categoryId, name, quantity)

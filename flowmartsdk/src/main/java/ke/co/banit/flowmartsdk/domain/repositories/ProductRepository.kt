@@ -24,7 +24,7 @@ interface ProductRepository {
     suspend fun getProductsByCategory(categoryId: Int): Result<ProductsByCategoryResponse, Exception>
     suspend fun updateProduct(
         productId: Int,
-        categoryId:Int,
+        categoryId: Int,
         name: String,
         quantity: String
     ): Result<UpdateProductResponse, Exception>

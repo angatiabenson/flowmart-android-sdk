@@ -67,13 +67,14 @@ inline fun <T, E : Exception> Result<T, E>.onError(action: (E) -> Unit): Result<
 }
 
 fun <T> Result<T, Exception>.handleResult(): Result<T, Exception> {
-    return when(this) {
+    return when (this) {
         is Result.Success -> this
         is Result.Error -> when (val exception = this.error) {
             is IOException -> Result.Error(NetworkException(exception.message ?: "Network error"))
             is HttpException -> {
                 Result.Error(ApiException(exception.code(), exception.message()))
             }
+
             else -> Result.Error(exception)
         }
     }
