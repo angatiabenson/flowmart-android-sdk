@@ -24,7 +24,7 @@ interface ProductApiService {
     suspend fun getAllProducts(): Response<ProductsListResponse>
 
     @POST("products")
-    suspend fun createProduct(@Body product: RequestBody): Response<CreateProductResponse>
+    suspend fun createProduct(@Body body: RequestBody): Response<CreateProductResponse>
 
     @GET("categories/{category_id}/products")
     suspend fun getProductsByCategory(@Path("category_id") categoryId: Int): Response<ProductsByCategoryResponse>

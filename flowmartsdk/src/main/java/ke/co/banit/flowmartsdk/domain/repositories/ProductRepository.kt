@@ -18,15 +18,16 @@ interface ProductRepository {
     suspend fun createProduct(
         categoryId: Int,
         name: String,
-        quantity: Int
+        quantity: String
     ): Result<CreateProductResponse, Exception>
 
     suspend fun getProductsByCategory(categoryId: Int): Result<ProductsByCategoryResponse, Exception>
     suspend fun updateProduct(
-        id: Int,
+        productId: Int,
+        categoryId:Int,
         name: String,
-        quantity: Int
+        quantity: String
     ): Result<UpdateProductResponse, Exception>
 
-    suspend fun deleteProduct(id: Int): Result<DeleteProductResponse, Exception>
+    suspend fun deleteProduct(productId: Int): Result<DeleteProductResponse, Exception>
 }
