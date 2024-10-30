@@ -1,0 +1,42 @@
+package ke.co.banit.flowmartsdk.data.remote
+
+import com.squareup.moshi.Moshi
+import ke.co.banit.flowmartsdk.data.remote.api.CategoryApiService
+import ke.co.banit.flowmartsdk.data.remote.api.ProductApiService
+import ke.co.banit.flowmartsdk.data.remote.api.UserApiService
+import ke.co.banit.flowmartsdk.domain.repositories.CategoryRepository
+import ke.co.banit.flowmartsdk.util.Settings
+import okhttp3.Interceptor
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import retrofit2.converter.moshi.MoshiConverterFactory
+import java.util.concurrent.TimeUnit
+
+/**
+ * @Author: Angatia Benson
+ * @Date: 10/30/2024
+ * Copyright (c) 2024 BanIT
+ */
+object ApiClient {
+
+    fun getCategoryAPIService(interceptor: Interceptor): CategoryApiService = getRetrofit(interceptor).create(CategoryApiService::class.java)
+    fun getProductAPIService(interceptor: Interceptor): ProductApiService = getRetrofit(interceptor).create(ProductApiService::class.java)
+    fun getUserAPIService(interceptor: Interceptor): UserApiService = getRetrofit(interceptor).create(UserApiService::class.java)
+
+    private fun getRetrofit(interceptor: Interceptor): Retrofit {
+        val httpLoggingInterceptor = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
+        val builder = OkHttpClient.Builder()
+        val client = builder.connectTimeout(Settings.CONNECT_TIMEOUT, TimeUnit.SECONDS)
+            .writeTimeout(Settings.WRITE_TIMEOUT, TimeUnit.SECONDS)
+            .readTimeout(Settings.READ_TIMEOUT, TimeUnit.SECONDS)
+            .addInterceptor(httpLoggingInterceptor)
+            .addInterceptor(interceptor)
+            .build()
+        return Retrofit.Builder()
+            .baseUrl(Settings.BASE_URL)
+            .addConverterFactory(MoshiConverterFactory.create(Moshi.Builder().build()))
+            .client(client)
+            .build()
+    }
+}
