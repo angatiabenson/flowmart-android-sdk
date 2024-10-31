@@ -59,51 +59,53 @@ class FlowMartSdk private constructor(
     private val deleteUserAccountUseCase: Lazy<DeleteUserAccountUseCase>
 ) {
     // Category Methods
-    suspend fun getCategories(): Result<CategoriesListResponse, Exception> {
-        return getCategoriesUseCase.value.invoke()
-    }
+    suspend fun getCategories(): Result<CategoriesListResponse, Exception> =
+        getCategoriesUseCase.value.invoke()
 
-    suspend fun createCategory(name: String): Result<CreateCategoryResponse, Exception> {
-        return createCategoryUseCase.value.invoke(name)
-    }
 
-    suspend fun updateCategory(id: Int, name: String): Result<UpdateCategoryResponse, Exception> {
-        return updateCategoryUseCase.value.invoke(id, name)
-    }
+    suspend fun createCategory(categoryName: String): Result<CreateCategoryResponse, Exception> =
+        createCategoryUseCase.value.invoke(categoryName)
 
-    suspend fun deleteCategory(id: Int): Result<DeleteCategoryResponse, Exception> {
-        return deleteCategoryUseCase.value.invoke(id)
-    }
+    suspend fun updateCategory(
+        categoryId: Int,
+        categoryName: String
+    ): Result<UpdateCategoryResponse, Exception> =
+        updateCategoryUseCase.value.invoke(categoryId, categoryName)
+
+
+    suspend fun deleteCategory(categoryId: Int): Result<DeleteCategoryResponse, Exception> =
+        deleteCategoryUseCase.value.invoke(categoryId)
+
 
     // Product Methods
-    suspend fun getProducts(): Result<ProductsListResponse, Exception> {
-        return getAllProductsUseCase.value.invoke()
-    }
+    suspend fun getProducts(): Result<ProductsListResponse, Exception> =
+        getAllProductsUseCase.value.invoke()
 
-    suspend fun getProductsByCategory(categoryId: Int): Result<ProductsByCategoryResponse, Exception> {
-        return getProductsByCategoryUseCase.value.invoke(categoryId)
-    }
+
+    suspend fun getProductsByCategory(categoryId: Int): Result<ProductsByCategoryResponse, Exception> =
+        getProductsByCategoryUseCase.value.invoke(categoryId)
+
 
     suspend fun createProduct(
         categoryId: Int,
-        name: String,
+        productName: String,
         quantity: String
-    ): Result<CreateProductResponse, Exception> {
-        return createProductUseCase.value.invoke(categoryId, name, quantity)
-    }
+    ): Result<CreateProductResponse, Exception> =
+        createProductUseCase.value.invoke(categoryId, productName, quantity)
+
 
     suspend fun updateProduct(
         productId: Int,
         categoryId: Int,
-        name: String,
+        productName: String,
         quantity: String
-    ): Result<UpdateProductResponse, Exception> {
-        return updateProductUseCase.value.invoke(productId, categoryId, name, quantity)
-    }
+    ): Result<UpdateProductResponse, Exception> =
+        updateProductUseCase.value.invoke(productId, categoryId, productName, quantity)
 
-    suspend fun deleteProduct(id: Int): Result<DeleteProductResponse, Exception> {
-        return deleteProductUseCase.value.invoke(id)
-    }
+
+    suspend fun deleteProduct(productId: Int): Result<DeleteProductResponse, Exception> =
+        deleteProductUseCase.value.invoke(productId)
+
 
     // User Methods
     suspend fun registerUser(
@@ -111,30 +113,28 @@ class FlowMartSdk private constructor(
         email: String,
         phone: String,
         password: String
-    ): Result<RegisterUserResponse, Exception> {
-        return registerUserUseCase.value.invoke(name, email, phone, password)
-    }
+    ): Result<RegisterUserResponse, Exception> =
+        registerUserUseCase.value.invoke(name, email, phone, password)
 
-    suspend fun loginUser(email: String, password: String): Result<LoginUserResponse, Exception> {
-        return loginUserUseCase.value.invoke(email, password)
-    }
+    suspend fun loginUser(email: String, password: String): Result<LoginUserResponse, Exception> =
+        loginUserUseCase.value.invoke(email, password)
 
-    suspend fun getUserProfile(): Result<UserProfileResponse, Exception> {
-        return getUserProfileUseCase.value.invoke()
-    }
+
+    suspend fun getUserProfile(): Result<UserProfileResponse, Exception> =
+        getUserProfileUseCase.value.invoke()
+
 
     suspend fun updateUserProfile(
         name: String?,
         email: String?,
         phone: String?,
         password: String?
-    ): Result<UpdateUserProfileResponse, Exception> {
-        return updateUserProfileUseCase.value.invoke(name, email, phone, password)
-    }
+    ): Result<UpdateUserProfileResponse, Exception> =
+        updateUserProfileUseCase.value.invoke(name, email, phone, password)
 
-    suspend fun deleteUserAccount(): Result<DeleteUserResponse, Exception> {
-        return deleteUserAccountUseCase.value.invoke()
-    }
+
+    suspend fun deleteUserAccount(): Result<DeleteUserResponse, Exception> =
+        deleteUserAccountUseCase.value.invoke()
 
 
     class Builder {
@@ -162,7 +162,6 @@ class FlowMartSdk private constructor(
             }
 
         fun build(): FlowMartSdk {
-            // Initialize Repositories
             val categoryRepository = createRepository(
                 serviceCreator = ApiClient::getCategoryAPIService,
                 repositoryFactory = ::CategoryRepositoryImpl
@@ -177,7 +176,6 @@ class FlowMartSdk private constructor(
                 repositoryFactory = ::UserRepositoryImpl
             )
 
-            // Initialize Use Cases
             val getCategoriesUseCase = GetCategoriesUseCase(categoryRepository)
             val createCategoryUseCase = CreateCategoryUseCase(categoryRepository)
             val updateCategoryUseCase = UpdateCategoryUseCase(categoryRepository)
