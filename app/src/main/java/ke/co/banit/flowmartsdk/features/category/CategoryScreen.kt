@@ -1,4 +1,4 @@
-package ke.co.banit.flowmartsdk.features
+package ke.co.banit.flowmartsdk.features.category
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,22 +15,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import ke.co.banit.flowmartsdk.ui.theme.FlowMartSDKTheme
 
 /**
  * @Author: Angatia Benson
- * @Date: 10/30/2024
+ * @Date: 10/31/2024
  * Copyright (c) 2024 BanIT
  */
 
-
 @Composable
-fun FlowMartScreen(
+fun CategoryScreen(
     modifier: Modifier = Modifier,
-    onCategoryClicked: () -> Unit = {},
-    onProductClicked: () -> Unit = {},
-    onUserClicked: () -> Unit = {}
+    onCreateCategoryClicked: () -> Unit = {},
+    onFetchCategoryClicked: () -> Unit = {}
 ) {
     Column(
         modifier = modifier
@@ -40,24 +39,23 @@ fun FlowMartScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "FlowMart SDK Example App",
+            text = "Category Operations",
             style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
-            color = MaterialTheme.colorScheme.onBackground,
-            textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.onBackground
         )
         Spacer(modifier = Modifier.height(20.dp))
         ElevatedButton(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp),
-            onClick = onCategoryClicked,
+            onClick = onCreateCategoryClicked,
             colors = ButtonDefaults.elevatedButtonColors(
                 containerColor = MaterialTheme.colorScheme.primaryContainer,
                 contentColor = MaterialTheme.colorScheme.onPrimaryContainer
             )
         ) {
             Text(
-                "Category",
+                "Create Category",
                 color = MaterialTheme.colorScheme.onBackground,
                 style = MaterialTheme.typography.labelLarge
             )
@@ -67,34 +65,25 @@ fun FlowMartScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp),
-            onClick = onProductClicked,
+            onClick = onFetchCategoryClicked,
             colors = ButtonDefaults.elevatedButtonColors(
                 containerColor = MaterialTheme.colorScheme.primaryContainer,
                 contentColor = MaterialTheme.colorScheme.onPrimaryContainer
             )
         ) {
             Text(
-                "Product",
+                "Fetch Category",
                 color = MaterialTheme.colorScheme.onBackground,
                 style = MaterialTheme.typography.labelLarge
             )
         }
-        Spacer(modifier = Modifier.height(8.dp))
-        ElevatedButton(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(48.dp),
-            onClick = onUserClicked,
-            colors = ButtonDefaults.elevatedButtonColors(
-                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                contentColor = MaterialTheme.colorScheme.onPrimaryContainer
-            )
-        ) {
-            Text(
-                "User",
-                color = MaterialTheme.colorScheme.onBackground,
-                style = MaterialTheme.typography.labelLarge
-            )
-        }
+    }
+}
+
+@PreviewLightDark
+@Composable
+fun CategoryScreenPreview() {
+    FlowMartSDKTheme {
+        CategoryScreen()
     }
 }

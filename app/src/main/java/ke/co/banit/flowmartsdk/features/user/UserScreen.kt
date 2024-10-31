@@ -1,4 +1,4 @@
-package ke.co.banit.flowmartsdk.features
+package ke.co.banit.flowmartsdk.features.user
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,22 +15,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
 /**
  * @Author: Angatia Benson
- * @Date: 10/30/2024
+ * @Date: 10/31/2024
  * Copyright (c) 2024 BanIT
  */
 
-
 @Composable
-fun FlowMartScreen(
+fun UserScreen(
     modifier: Modifier = Modifier,
-    onCategoryClicked: () -> Unit = {},
-    onProductClicked: () -> Unit = {},
-    onUserClicked: () -> Unit = {}
+    onRegisterClicked: () -> Unit = {},
+    onLoginClicked: () -> Unit = {},
+    onFetchProfileClicked: () -> Unit = {}
 ) {
     Column(
         modifier = modifier
@@ -40,24 +38,23 @@ fun FlowMartScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "FlowMart SDK Example App",
+            text = "User Operations",
             style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
-            color = MaterialTheme.colorScheme.onBackground,
-            textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.onBackground
         )
         Spacer(modifier = Modifier.height(20.dp))
         ElevatedButton(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp),
-            onClick = onCategoryClicked,
+            onClick = onRegisterClicked,
             colors = ButtonDefaults.elevatedButtonColors(
                 containerColor = MaterialTheme.colorScheme.primaryContainer,
                 contentColor = MaterialTheme.colorScheme.onPrimaryContainer
             )
         ) {
             Text(
-                "Category",
+                "Register",
                 color = MaterialTheme.colorScheme.onBackground,
                 style = MaterialTheme.typography.labelLarge
             )
@@ -67,14 +64,14 @@ fun FlowMartScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp),
-            onClick = onProductClicked,
+            onClick = onLoginClicked,
             colors = ButtonDefaults.elevatedButtonColors(
                 containerColor = MaterialTheme.colorScheme.primaryContainer,
                 contentColor = MaterialTheme.colorScheme.onPrimaryContainer
             )
         ) {
             Text(
-                "Product",
+                "Login",
                 color = MaterialTheme.colorScheme.onBackground,
                 style = MaterialTheme.typography.labelLarge
             )
@@ -84,14 +81,14 @@ fun FlowMartScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp),
-            onClick = onUserClicked,
+            onClick = onFetchProfileClicked,
             colors = ButtonDefaults.elevatedButtonColors(
                 containerColor = MaterialTheme.colorScheme.primaryContainer,
                 contentColor = MaterialTheme.colorScheme.onPrimaryContainer
             )
         ) {
             Text(
-                "User",
+                "Fetch User Profile",
                 color = MaterialTheme.colorScheme.onBackground,
                 style = MaterialTheme.typography.labelLarge
             )

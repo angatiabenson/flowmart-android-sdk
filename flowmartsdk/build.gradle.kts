@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "ke.co.banit.flowmartsdk"
+    namespace = "ke.co.banit.flowmartsdk.sdk"
     compileSdk = 34
 
     defaultConfig {

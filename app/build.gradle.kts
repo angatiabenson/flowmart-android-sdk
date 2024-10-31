@@ -5,13 +5,13 @@ plugins {
 }
 
 android {
-    namespace = "ke.co.banit.flowmartsdk"
-    compileSdk = 34
+    namespace = "ke.co.banit.flowmartsdk.app"
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "ke.co.banit.flowmartsdk"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -61,4 +61,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     implementation(project(":flowmartsdk"))
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
 }
