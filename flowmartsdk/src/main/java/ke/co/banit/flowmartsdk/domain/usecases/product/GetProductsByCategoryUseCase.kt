@@ -16,7 +16,7 @@ import ke.co.banit.flowmartsdk.util.runCatchingResult
  * Use case for retrieving products by category from the repository.
  * @property repository An instance of ProductRepository to fetch products.
  */
-class GetProductsByCategoryUseCase(private val repository: ProductRepository) {
+internal class GetProductsByCategoryUseCase(private val repository: ProductRepository) {
     /**
      * Executes the use case to retrieve products by a specific category.
      * @param categoryId The ID of the category to filter products.

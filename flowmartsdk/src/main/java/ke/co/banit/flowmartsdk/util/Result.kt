@@ -36,4 +36,4 @@ sealed interface Result<out D, out E : Exception> {
  *
  * @param E The type of the error exception.
  */
-typealias EmptyResult<E> = Result<Unit, E>
+internal typealias EmptyResult<E> = Result<Unit, E>

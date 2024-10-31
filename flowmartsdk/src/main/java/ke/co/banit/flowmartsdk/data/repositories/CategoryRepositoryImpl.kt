@@ -16,7 +16,7 @@ import okhttp3.MultipartBody
  * @Date: 10/30/2024
  * Copyright (c) 2024 BanIT
  */
-class CategoryRepositoryImpl(private val categoryApiService: CategoryApiService) :
+internal class CategoryRepositoryImpl(private val categoryApiService: CategoryApiService) :
     CategoryRepository {
     override suspend fun getAllCategories(): Result<CategoriesListResponse, Exception> {
         return try {

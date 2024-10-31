@@ -11,7 +11,7 @@ import ke.co.banit.flowmartsdk.util.runCatchingResult
  * @Date: 10/28/2024
  * Copyright (c) 2024 BanIT
  */
-class CreateCategoryUseCase(private val categoryRepository: CategoryRepository) {
+internal class CreateCategoryUseCase(private val categoryRepository: CategoryRepository) {
     suspend operator fun invoke(name: String): Result<CreateCategoryResponse, Exception> {
         return runCatchingResult {
             categoryRepository.createCategory(name)

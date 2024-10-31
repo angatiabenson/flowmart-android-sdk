@@ -16,7 +16,7 @@ import ke.co.banit.flowmartsdk.util.runCatchingResult
  * Use case for deleting the user account.
  * @property repository An instance of UserRepository to handle account deletion.
  */
-class DeleteUserAccountUseCase(private val repository: UserRepository) {
+internal class DeleteUserAccountUseCase(private val repository: UserRepository) {
     /**
      * Executes the use case to delete the user's account.
      * @return Result<Unit, Exception> - A result wrapping a success unit or an exception on failure.

@@ -16,7 +16,7 @@ import ke.co.banit.flowmartsdk.util.runCatchingResult
  * Use case for retrieving all products from the repository.
  * @property repository An instance of ProductRepository to access product data.
  */
-class GetAllProductsUseCase(private val repository: ProductRepository) {
+internal class GetAllProductsUseCase(private val repository: ProductRepository) {
     /**
      * Executes the use case to retrieve all products.
      * @return Result<List<Product>, Exception> - A result wrapping a list of products or an exception on failure.

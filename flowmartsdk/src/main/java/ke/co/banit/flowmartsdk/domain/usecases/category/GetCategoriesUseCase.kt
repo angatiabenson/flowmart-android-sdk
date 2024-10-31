@@ -12,7 +12,7 @@ import ke.co.banit.flowmartsdk.util.runCatchingResult
  * Copyright (c) 2024 BanIT
  */
 
-class GetCategoriesUseCase(private val categoryRepository: CategoryRepository) {
+internal class GetCategoriesUseCase(private val categoryRepository: CategoryRepository) {
     suspend operator fun invoke(): Result<CategoriesListResponse, Exception> {
         return runCatchingResult {
             categoryRepository.getAllCategories()

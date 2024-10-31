@@ -12,7 +12,7 @@ import ke.co.banit.flowmartsdk.util.Result
  * @Date: 10/28/2024
  * Copyright (c) 2024 BanIT
  */
-interface UserRepository {
+internal interface UserRepository {
     suspend fun registerUser(
         name: String,
         email: String,

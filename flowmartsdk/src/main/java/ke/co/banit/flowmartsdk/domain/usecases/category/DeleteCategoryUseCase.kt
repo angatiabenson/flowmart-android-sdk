@@ -12,7 +12,7 @@ import ke.co.banit.flowmartsdk.util.runCatchingResult
  * Copyright (c) 2024 BanIT
  */
 
-class DeleteCategoryUseCase(private val categoryRepository: CategoryRepository) {
+internal class DeleteCategoryUseCase(private val categoryRepository: CategoryRepository) {
     suspend operator fun invoke(id: Int): Result<DeleteCategoryResponse, Exception> {
         return runCatchingResult {
             categoryRepository.deleteCategory(id)

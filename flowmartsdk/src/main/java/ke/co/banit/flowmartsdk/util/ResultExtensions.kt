@@ -74,7 +74,6 @@ fun <T> Result<T, Exception>.handleResult(): Result<T, Exception> {
             is HttpException -> {
                 Result.Error(ApiException(exception.code(), exception.message()))
             }
-
             else -> Result.Error(exception)
         }
     }

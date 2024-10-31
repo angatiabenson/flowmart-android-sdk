@@ -16,7 +16,7 @@ import ke.co.banit.flowmartsdk.util.runCatchingResult
  * Use case for creating a new product in a specific category.
  * @property repository An instance of ProductRepository to handle product creation.
  */
-class CreateProductUseCase(private val repository: ProductRepository) {
+internal class CreateProductUseCase(private val repository: ProductRepository) {
     /**
      * Executes the use case to create a new product.
      * @param categoryId The ID of the category where the product will be added.

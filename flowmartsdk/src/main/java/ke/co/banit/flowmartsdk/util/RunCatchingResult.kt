@@ -14,7 +14,7 @@ package ke.co.banit.flowmartsdk.util
  * @param block The block of code to execute.
  * @return A [Result.Success] if the block executes successfully, or [Result.Error] if an exception is thrown.
  */
-inline fun <T> runCatchingResult(block: () -> Result<T, Exception>): Result<T, Exception> {
+internal inline fun <T> runCatchingResult(block: () -> Result<T, Exception>): Result<T, Exception> {
     return try {
         block()
     } catch (e: Exception) {

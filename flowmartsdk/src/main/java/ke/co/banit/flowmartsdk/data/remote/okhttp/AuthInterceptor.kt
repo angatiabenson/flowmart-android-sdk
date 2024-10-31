@@ -9,7 +9,7 @@ import java.io.IOException
  * @Date: 10/30/2024
  * Copyright (c) 2024 BanIT
  */
-class AuthInterceptor(
+internal class AuthInterceptor(
     private val apiKey: String,
 ) : Interceptor {
 

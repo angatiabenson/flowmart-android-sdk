@@ -18,7 +18,7 @@ import ke.co.banit.flowmartsdk.util.runCatchingResult
  * Use case for logging in a user.
  * @property repository An instance of UserRepository to handle user login.
  */
-class LoginUserUseCase(private val repository: UserRepository) {
+internal class LoginUserUseCase(private val repository: UserRepository) {
     /**
      * Executes the use case to log in a user.
      * @param email The email address of the user.

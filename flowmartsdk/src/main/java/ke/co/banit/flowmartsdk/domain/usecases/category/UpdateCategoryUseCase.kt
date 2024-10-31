@@ -12,7 +12,7 @@ import ke.co.banit.flowmartsdk.util.runCatchingResult
  * Copyright (c) 2024 BanIT
  */
 
-class UpdateCategoryUseCase(private val categoryRepository: CategoryRepository) {
+internal class UpdateCategoryUseCase(private val categoryRepository: CategoryRepository) {
     suspend operator fun invoke(id: Int, name: String): Result<UpdateCategoryResponse, Exception> {
         return runCatchingResult {
             categoryRepository.updateCategory(id, name)

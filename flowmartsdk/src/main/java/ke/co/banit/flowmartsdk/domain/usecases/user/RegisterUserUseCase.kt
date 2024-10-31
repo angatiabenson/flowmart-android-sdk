@@ -20,7 +20,7 @@ import ke.co.banit.flowmartsdk.util.runCatchingResult
  * Use case for registering a new user.
  * @property repository An instance of UserRepository to handle user registration.
  */
-class RegisterUserUseCase(private val repository: UserRepository) {
+internal class RegisterUserUseCase(private val repository: UserRepository) {
     /**
      * Executes the use case to register a new user.
      * @param name The name of the user.

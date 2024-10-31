@@ -16,7 +16,7 @@ import okhttp3.MultipartBody
  * @Date: 10/30/2024
  * Copyright (c) 2024 BanIT
  */
-class ProductRepositoryImpl(private val productApiService: ProductApiService) :
+internal class ProductRepositoryImpl(private val productApiService: ProductApiService) :
     ProductRepository {
     override suspend fun getAllProducts(): Result<ProductsListResponse, Exception> {
         return try {

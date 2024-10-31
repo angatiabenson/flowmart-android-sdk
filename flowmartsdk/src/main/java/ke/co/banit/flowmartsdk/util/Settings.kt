@@ -5,7 +5,7 @@ package ke.co.banit.flowmartsdk.util
  * @Date: 10/30/2024
  * Copyright (c) 2024 BanIT
  */
-object Settings {
+internal object Settings {
     /**
      * Connection timeout duration
      */

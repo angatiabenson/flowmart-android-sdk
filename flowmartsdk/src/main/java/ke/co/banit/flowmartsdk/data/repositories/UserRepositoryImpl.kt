@@ -16,7 +16,7 @@ import okhttp3.MultipartBody
  * @Date: 10/30/2024
  * Copyright (c) 2024 BanIT
  */
-class UserRepositoryImpl(private val userApiService: UserApiService) :
+internal class UserRepositoryImpl(private val userApiService: UserApiService) :
     UserRepository {
     override suspend fun registerUser(
         name: String,

@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit
  * @Date: 10/30/2024
  * Copyright (c) 2024 BanIT
  */
-object ApiClient {
+internal object ApiClient {
 
     fun getCategoryAPIService(baseUrl: String, interceptor: Interceptor): CategoryApiService =
         getRetrofit(baseUrl, interceptor).create(CategoryApiService::class.java)

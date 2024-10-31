@@ -19,7 +19,7 @@ import retrofit2.http.Path
  * Copyright (c) 2024 BanIT
  */
 
-interface CategoryApiService {
+internal interface CategoryApiService {
     @GET("categories")
     suspend fun getAllCategories(): Response<CategoriesListResponse>
 

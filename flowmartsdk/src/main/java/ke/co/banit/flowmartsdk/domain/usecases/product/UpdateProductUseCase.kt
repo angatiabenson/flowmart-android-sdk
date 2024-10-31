@@ -17,7 +17,7 @@ import ke.co.banit.flowmartsdk.util.runCatchingResult
  * Use case for updating an existing product in the repository.
  * @property repository An instance of ProductRepository to handle product updates.
  */
-class UpdateProductUseCase(private val repository: ProductRepository) {
+internal class UpdateProductUseCase(private val repository: ProductRepository) {
     /**
      * Executes the use case to update an existing product.
      * @param id The unique identifier of the product to update.

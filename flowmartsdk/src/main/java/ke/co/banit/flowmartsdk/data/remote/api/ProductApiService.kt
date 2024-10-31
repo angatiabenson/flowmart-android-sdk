@@ -19,7 +19,7 @@ import retrofit2.http.Path
  * @Date: 10/30/2024
  * Copyright (c) 2024 BanIT
  */
-interface ProductApiService {
+internal interface ProductApiService {
     @GET("products")
     suspend fun getAllProducts(): Response<ProductsListResponse>
 

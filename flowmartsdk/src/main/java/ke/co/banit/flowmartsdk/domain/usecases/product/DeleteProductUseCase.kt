@@ -16,7 +16,7 @@ import ke.co.banit.flowmartsdk.util.runCatchingResult
  * Use case for deleting a product in the repository.
  * @property repository An instance of ProductRepository to handle product deletion.
  */
-class DeleteProductUseCase(private val repository: ProductRepository) {
+internal class DeleteProductUseCase(private val repository: ProductRepository) {
     /**
      * Executes the use case to delete a product by its ID.
      * @param id The unique identifier of the product to delete.

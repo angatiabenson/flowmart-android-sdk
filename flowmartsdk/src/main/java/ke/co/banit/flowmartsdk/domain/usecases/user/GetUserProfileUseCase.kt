@@ -16,7 +16,7 @@ import ke.co.banit.flowmartsdk.util.runCatchingResult
  * Use case for retrieving the user profile.
  * @property repository An instance of UserRepository to fetch user profile data.
  */
-class GetUserProfileUseCase(private val repository: UserRepository) {
+internal class GetUserProfileUseCase(private val repository: UserRepository) {
     /**
      * Executes the use case to retrieve the user profile.
      * @return Result<User, Exception> - A result wrapping the user profile or an exception on failure.

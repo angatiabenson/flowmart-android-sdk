@@ -20,7 +20,7 @@ import ke.co.banit.flowmartsdk.util.runCatchingResult
  * Use case for updating the user's profile.
  * @property repository An instance of UserRepository to handle profile updates.
  */
-class UpdateUserProfileUseCase(private val repository: UserRepository) {
+internal class UpdateUserProfileUseCase(private val repository: UserRepository) {
     /**
      * Executes the use case to update the user's profile.
      * @param name The updated name of the user (nullable).

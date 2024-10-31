@@ -11,7 +11,7 @@ import ke.co.banit.flowmartsdk.util.Result
  * @Date: 10/28/2024
  * Copyright (c) 2024 BanIT
  */
-interface CategoryRepository {
+internal interface CategoryRepository {
     suspend fun getAllCategories(): Result<CategoriesListResponse, Exception>
     suspend fun createCategory(name: String): Result<CreateCategoryResponse, Exception>
     suspend fun updateCategory(id: Int, name: String): Result<UpdateCategoryResponse, Exception>

@@ -19,7 +19,7 @@ import retrofit2.http.PUT
  * Copyright (c) 2024 BanIT
  */
 
-interface UserApiService {
+internal interface UserApiService {
     @POST("register")
     suspend fun registerUser(@Body body: RequestBody): Response<RegisterUserResponse>
 

@@ -13,7 +13,7 @@ import ke.co.banit.flowmartsdk.util.Result
  * Copyright (c) 2024 BanIT
  */
 
-interface ProductRepository {
+internal interface ProductRepository {
     suspend fun getAllProducts(): Result<ProductsListResponse, Exception>
     suspend fun createProduct(
         categoryId: Int,
