@@ -13,6 +13,9 @@ import ke.co.banit.flowmartsdk.features.category.UpdateCategoryScreen
 import ke.co.banit.flowmartsdk.features.product.CreateProductScreen
 import ke.co.banit.flowmartsdk.features.product.ProductListScreen
 import ke.co.banit.flowmartsdk.features.product.ProductScreen
+import ke.co.banit.flowmartsdk.features.user.LoginScreen
+import ke.co.banit.flowmartsdk.features.user.RegistrationScreen
+import ke.co.banit.flowmartsdk.features.user.UpdateUserScreen
 import ke.co.banit.flowmartsdk.features.user.UserScreen
 
 /**
@@ -62,7 +65,22 @@ fun AppNavigation() {
             ProductListScreen()
         }
         composable(Screen.User.route) {
-            UserScreen()
+            UserScreen(
+                onRegisterClicked = { navController.navigate(Screen.Registration.route) },
+                onLoginClicked = { navController.navigate(Screen.Login.route) },
+                onFetchProfileClicked = { navController.navigate(Screen.UpdateUser.route) }
+            )
+        }
+
+        composable(Screen.Registration.route) {
+            RegistrationScreen()
+        }
+
+        composable(Screen.Login.route) {
+            LoginScreen()
+        }
+        composable(Screen.UpdateUser.route) {
+            UpdateUserScreen()
         }
     }
 }
