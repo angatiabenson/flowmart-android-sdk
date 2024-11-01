@@ -135,7 +135,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     // Delete user
-    fun deleteUser(userId: String) {
+    fun deleteUser() {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true)
             try {

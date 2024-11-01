@@ -82,7 +82,7 @@ fun AppNavigation(categoryViewModel: CategoryViewModel, userViewModel: UserViewM
             LoginScreen(viewModel = userViewModel)
         }
         composable(Screen.UpdateUser.route) {
-            UpdateUserScreen()
+            UpdateUserScreen(viewModel = userViewModel)
         }
     }
 }

@@ -35,10 +35,27 @@ internal class UpdateUserProfileUseCase(private val repository: UserRepository) 
         phone: String?,
         password: String?
     ): Result<UpdateUserProfileResponse, Exception> {
-        if (name != null && name.isBlank()) return Result.Error(Exception("Name cannot be blank"))
-        if (email != null && !isEmailValid(email)) return Result.Error(Exception("Invalid email format"))
-        if (phone != null && !isPhoneValid(phone)) return Result.Error(Exception("Invalid phone number format"))
-        if (password != null && !isPasswordStrong(password)) return Result.Error(Exception("Password must be at least 8 characters, contain a number, an uppercase letter, and a special character"))
+        // Check if name is provided and validate it
+        if (!name.isNullOrEmpty() && name.isBlank()) {
+            return Result.Error(Exception("Name cannot be blank"))
+        }
+
+        // Check if email is provided and validate format
+        if (!email.isNullOrEmpty() && !isEmailValid(email)) {
+            return Result.Error(Exception("Invalid email format"))
+        }
+
+        // Check if phone is provided and validate format
+        if (!phone.isNullOrEmpty() && !isPhoneValid(phone)) {
+            return Result.Error(Exception("Invalid phone number format"))
+        }
+
+        // Check if password is provided and validate strength
+        if (!password.isNullOrEmpty() && !isPasswordStrong(password)) {
+            return Result.Error(
+                Exception("Password must be at least 8 characters, contain a number, an uppercase letter, and a special character")
+            )
+        }
 
         return runCatchingResult {
             repository.updateUserProfile(name, email, phone, password)
