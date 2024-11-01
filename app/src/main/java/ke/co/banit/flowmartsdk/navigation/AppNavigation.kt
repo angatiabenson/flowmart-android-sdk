@@ -10,6 +10,8 @@ import ke.co.banit.flowmartsdk.features.category.CategoryListScreen
 import ke.co.banit.flowmartsdk.features.category.CategoryScreen
 import ke.co.banit.flowmartsdk.features.category.CreateCategoryScreen
 import ke.co.banit.flowmartsdk.features.category.UpdateCategoryScreen
+import ke.co.banit.flowmartsdk.features.product.CreateProductScreen
+import ke.co.banit.flowmartsdk.features.product.ProductListScreen
 import ke.co.banit.flowmartsdk.features.product.ProductScreen
 import ke.co.banit.flowmartsdk.features.user.UserScreen
 
@@ -48,7 +50,16 @@ fun AppNavigation() {
         }
 
         composable(Screen.Product.route) {
-            ProductScreen()
+            ProductScreen(
+                onCreateProductClicked = { navController.navigate(Screen.CreateProduct.route) },
+                onFetchProductClicked = { navController.navigate(Screen.FetchProduct.route) }
+            )
+        }
+        composable(Screen.CreateProduct.route) {
+            CreateProductScreen()
+        }
+        composable(Screen.FetchProduct.route) {
+            ProductListScreen()
         }
         composable(Screen.User.route) {
             UserScreen()

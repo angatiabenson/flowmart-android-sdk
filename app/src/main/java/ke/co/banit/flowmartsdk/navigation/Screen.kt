@@ -13,4 +13,6 @@ sealed class Screen(val route: String) {
     data object CreateCategory : Screen("category/create_category")
     data object FetchCategory : Screen("category/fetch_category")
     data object UpdateCategory : Screen("category/fetch_category")
+    data object CreateProduct : Screen("product/create_product")
+    data object FetchProduct : Screen("product/fetch_product")
 }
