@@ -38,7 +38,6 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
                     )
                 }
                 .onError { exception ->
-                    exception.printStackTrace()
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
                         errorMessage = "Failed to create category: ${exception.message}"
@@ -53,7 +52,7 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
 
         viewModelScope.launch {
             val apiKey = preferencesManager.apiKey.first()
-            val sdk = initializeSdk(apiKey!!)
+            val sdk = initializeSdk(apiKey)
             sdk.getCategories()
                 .onSuccess { categories ->
                     _uiState.value = _uiState.value.copy(
@@ -76,14 +75,13 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
 
         viewModelScope.launch {
             val apiKey = preferencesManager.apiKey.first()
-            val sdk = initializeSdk(apiKey!!)
+            val sdk = initializeSdk(apiKey)
             sdk.updateCategory(categoryId, newName)
                 .onSuccess {
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
                         successMessage = "Category updated successfully!",
                     )
-                    fetchCategories() // Refresh list after update
                 }
                 .onError { exception ->
                     _uiState.value = _uiState.value.copy(
@@ -100,7 +98,7 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
 
         viewModelScope.launch {
             val apiKey = preferencesManager.apiKey.first()
-            val sdk = initializeSdk(apiKey!!)
+            val sdk = initializeSdk(apiKey)
             sdk.deleteCategory(categoryId)
                 .onSuccess {
                     _uiState.value = _uiState.value.copy(

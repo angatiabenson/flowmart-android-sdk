@@ -47,7 +47,7 @@ fun AppNavigation(categoryViewModel: CategoryViewModel) {
             CreateCategoryScreen(viewModel = categoryViewModel)
         }
         composable(Screen.FetchCategory.route) {
-            CategoryListScreen()
+            CategoryListScreen(viewModel = categoryViewModel)
         }
         composable(Screen.UpdateCategory.route) {
             UpdateCategoryScreen()

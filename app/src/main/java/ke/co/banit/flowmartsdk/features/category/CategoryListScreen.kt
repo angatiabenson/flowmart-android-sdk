@@ -21,11 +21,16 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import ke.co.banit.flowmartsdk.data.models.dto.Category
+import ke.co.banit.flowmartsdk.features.components.ErrorView
 
 /**
  * @Author: Angatia Benson
@@ -35,50 +40,73 @@ import ke.co.banit.flowmartsdk.data.models.dto.Category
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CategoryListScreen() {
-    val categories = emptyList<Category>()
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        "Create Product Category",
-                        style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold)
-                    )
-                }
+fun CategoryListScreen(viewModel: CategoryViewModel) {
+    LaunchedEffect(Unit) {
+        viewModel.fetchCategories()
+    }
+    DisposableEffect(Unit) {
+        onDispose {
+            viewModel.resetUiState()
+        }
+    }
+    val uiState by viewModel.uiState.collectAsState()
+
+    Scaffold(topBar = {
+        TopAppBar(title = {
+            Text(
+                "Create Product Category",
+                style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold)
             )
-        },
-        content = { paddingValues ->
-            if (categories.isEmpty()) {
-                // Show a loading indicator or "no categories" message if the list is empty
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text("No categories available", style = MaterialTheme.typography.labelMedium)
-                }
-            } else {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues)
-                        .padding(16.dp)
-                ) {
-                    items(categories) { category ->
-                        CategoryListItem(
-                            category = category,
-                            onDeleteCategory = {},
-                            onEditCategory = {},
-                            onViewProductsInCategory = {}
-                        )
-                        HorizontalDivider()
-                    }
-                }
+        })
+    }, content = { paddingValues ->
+        if (uiState.isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
+                contentAlignment = Alignment.Center
+            ) {
+                Text("Loading...")
+            }
+        } else {
+            if (uiState.categories.isNotEmpty()) {
+                DisplayCategoryList(
+                    modifier = Modifier.padding(paddingValues), categories = uiState.categories
+                )
+            }
+            uiState.errorMessage?.let { errorMessage ->
+                ErrorView(modifier = Modifier.padding(paddingValues),
+                    text = errorMessage,
+                    onRetry = { viewModel.fetchCategories() })
             }
         }
-    )
+    })
+}
+
+@Composable
+fun DisplayCategoryList(modifier: Modifier = Modifier, categories: List<Category>) {
+    if (categories.isEmpty()) {
+        // Show a loading indicator or "no categories" message if the list is empty
+        Box(
+            modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center
+        ) {
+            Text("No categories available", style = MaterialTheme.typography.labelMedium)
+        }
+    } else {
+        LazyColumn(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
+            items(categories) { category ->
+                CategoryListItem(category = category,
+                    onDeleteCategory = {},
+                    onEditCategory = {},
+                    onViewProductsInCategory = {})
+                HorizontalDivider()
+            }
+        }
+    }
 }
 
 @Composable
@@ -105,14 +133,12 @@ fun CategoryListItem(
         Row {
             IconButton(onClick = { onViewProductsInCategory(category) }) {
                 Icon(
-                    imageVector = Icons.Default.Visibility,
-                    contentDescription = "View Products"
+                    imageVector = Icons.Default.Visibility, contentDescription = "View Products"
                 )
             }
             IconButton(onClick = { onEditCategory(category) }) {
                 Icon(
-                    imageVector = Icons.Default.Edit,
-                    contentDescription = "Edit Category"
+                    imageVector = Icons.Default.Edit, contentDescription = "Edit Category"
                 )
             }
             IconButton(onClick = { onDeleteCategory(category) }) {
