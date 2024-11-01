@@ -7,6 +7,5 @@ data class LoginUserResponse(
 
     @Json(name = "api_key") val apiKey: String,
     val message: String,
-    val status: String,
     val user: User
 )

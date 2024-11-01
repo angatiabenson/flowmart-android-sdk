@@ -6,8 +6,8 @@ package ke.co.banit.flowmartsdk.data.models.response
  * Copyright (c) 2024 BanIT
  */
 internal data class ApiResponse<T>(
-    val status: String,
-    val message: String,
+    val status: String? = null,
+    val message: String? = null,
     val code: Int? = null,
     val data: T? = null
 )

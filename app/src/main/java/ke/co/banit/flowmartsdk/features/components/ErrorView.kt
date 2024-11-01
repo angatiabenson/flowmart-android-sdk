@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
 /**
@@ -32,6 +33,7 @@ fun ErrorView(
 ) {
     Box(
         modifier = modifier
+            .padding(16.dp)
             .fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
@@ -45,6 +47,7 @@ fun ErrorView(
             Text(
                 text = text,
                 modifier = Modifier.padding(top = 12.dp),
+                textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold)
             )
             Spacer(modifier = Modifier.height(24.dp))

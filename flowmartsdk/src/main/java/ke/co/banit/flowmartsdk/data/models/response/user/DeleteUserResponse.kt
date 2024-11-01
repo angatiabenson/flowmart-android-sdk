@@ -6,6 +6,5 @@ package ke.co.banit.flowmartsdk.data.models.response.user
  * Copyright (c) 2024 BanIT
  */
 data class DeleteUserResponse(
-    val message: String,
-    val status: String
+    val message: String
 )

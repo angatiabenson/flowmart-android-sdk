@@ -99,6 +99,7 @@ fun CreateCategoryScreen(viewModel: CategoryViewModel) {
                     },
                     isError = false
                 )
+                categoryName = ""
             }
 
             uiState.errorMessage?.let { errorMessage ->

@@ -7,11 +7,13 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import ke.co.banit.flowmartsdk.features.category.CategoryViewModel
+import ke.co.banit.flowmartsdk.features.user.UserViewModel
 import ke.co.banit.flowmartsdk.navigation.AppNavigation
 import ke.co.banit.flowmartsdk.ui.theme.FlowMartSDKTheme
 
 class MainActivity : ComponentActivity() {
     private val categoryViewModel: CategoryViewModel by viewModels()
+    private val userViewModel: UserViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,7 +21,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             FlowMartSDKTheme {
                 AppNavigation(
-                    categoryViewModel = categoryViewModel
+                    categoryViewModel = categoryViewModel,
+                    userViewModel = userViewModel
                 )
             }
         }

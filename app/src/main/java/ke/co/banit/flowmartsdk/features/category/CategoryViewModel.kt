@@ -21,7 +21,7 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
     private val _uiState = MutableStateFlow(CategoryUiState())
     val uiState: StateFlow<CategoryUiState> = _uiState
 
-    private val preferencesManager = PreferencesManager(application)
+    private val preferencesManager = PreferencesManager.getInstance(application)
 
     // Create category
     fun createCategory(name: String) {
@@ -31,10 +31,10 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
             val apiKey = preferencesManager.apiKey.first()
             val sdk = initializeSdk(apiKey)
             sdk.createCategory(name)
-                .onSuccess {
+                .onSuccess { response ->
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
-                        successMessage = "Category created successfully!",
+                        successMessage = response.message,
                     )
                 }
                 .onError { exception ->
@@ -61,6 +61,7 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
                     )
                 }
                 .onError { exception ->
+                    exception.printStackTrace()
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
                         errorMessage = "Failed to fetch categories: ${exception.message}"

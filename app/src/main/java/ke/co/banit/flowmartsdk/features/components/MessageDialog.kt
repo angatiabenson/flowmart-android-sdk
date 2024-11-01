@@ -31,11 +31,12 @@ fun MessageDialog(
     Dialog(onDismissRequest = onDismiss) {
         Box(
             modifier = Modifier
-                .padding(16.dp)
                 .background(Color.White, shape = RoundedCornerShape(8.dp))
                 .padding(16.dp)
         ) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
                 Text(
                     text = if (isError) "Error" else "Success",
                     style = MaterialTheme.typography.bodyLarge,

@@ -20,6 +20,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,6 +33,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import ke.co.banit.flowmartsdk.features.components.LoadingDialog
+import ke.co.banit.flowmartsdk.features.components.MessageDialog
 
 /**
  * @Author: Angatia Benson
@@ -39,15 +43,25 @@ import androidx.compose.ui.unit.dp
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RegistrationScreen() {
+fun RegistrationScreen(
+    viewModel: UserViewModel
+) {
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var phone by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isPasswordVisible by remember { mutableStateOf(false) }
 
+    val uiState by viewModel.uiState.collectAsState()
+
     val isFormValid =
         name.isNotBlank() && email.isNotBlank() && phone.isNotBlank() && password.isNotBlank()
+
+    DisposableEffect(Unit) {
+        onDispose {
+            viewModel.resetUiState()
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -131,7 +145,7 @@ fun RegistrationScreen() {
                 // Submit Button
                 Button(
                     onClick = {
-                        //onSubmit(name, email, phone, password)
+                        viewModel.registerUser(name, email, phone, password)
                     },
                     enabled = isFormValid,
                     modifier = Modifier.fillMaxWidth(),
@@ -139,6 +153,27 @@ fun RegistrationScreen() {
                 ) {
                     Text("Register", style = MaterialTheme.typography.labelLarge)
                 }
+            }
+
+            // Show Loading Dialog if loading
+            LoadingDialog(isLoading = uiState.isLoading)
+
+            uiState.successMessage?.let { successMessage ->
+                MessageDialog(
+                    message = successMessage,
+                    onDismiss = {
+                        viewModel.resetUiState()
+                    },
+                    isError = false
+                )
+            }
+
+            uiState.errorMessage?.let { errorMessage ->
+                MessageDialog(
+                    message = errorMessage,
+                    onDismiss = { viewModel.resetUiState() },
+                    isError = true
+                )
             }
         }
     )

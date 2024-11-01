@@ -4,5 +4,4 @@ import ke.co.banit.flowmartsdk.data.models.dto.Product
 
 data class ProductsListResponse(
     val products: List<Product>,
-    val status: String
 )

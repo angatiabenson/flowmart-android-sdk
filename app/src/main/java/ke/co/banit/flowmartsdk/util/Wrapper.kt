@@ -8,7 +8,7 @@ import ke.co.banit.flowmartsdk.FlowMartSdk
  * Copyright (c) 2024 BanIT
  */
 
-fun initializeSdk(apiKey: String?): FlowMartSdk {
+fun initializeSdk(apiKey: String? = null): FlowMartSdk {
     // Use the API key to configure SDK here
     return FlowMartSdk.Builder()
         .configure(

@@ -18,6 +18,7 @@ import ke.co.banit.flowmartsdk.features.user.LoginScreen
 import ke.co.banit.flowmartsdk.features.user.RegistrationScreen
 import ke.co.banit.flowmartsdk.features.user.UpdateUserScreen
 import ke.co.banit.flowmartsdk.features.user.UserScreen
+import ke.co.banit.flowmartsdk.features.user.UserViewModel
 
 /**
  * @Author: Angatia Benson
@@ -26,7 +27,7 @@ import ke.co.banit.flowmartsdk.features.user.UserScreen
  */
 
 @Composable
-fun AppNavigation(categoryViewModel: CategoryViewModel) {
+fun AppNavigation(categoryViewModel: CategoryViewModel, userViewModel: UserViewModel) {
     val navController = rememberNavController()
 
     NavHost(navController = navController, startDestination = Screen.Main.route) {
@@ -74,11 +75,11 @@ fun AppNavigation(categoryViewModel: CategoryViewModel) {
         }
 
         composable(Screen.Registration.route) {
-            RegistrationScreen()
+            RegistrationScreen(viewModel = userViewModel)
         }
 
         composable(Screen.Login.route) {
-            LoginScreen()
+            LoginScreen(viewModel = userViewModel)
         }
         composable(Screen.UpdateUser.route) {
             UpdateUserScreen()

@@ -14,26 +14,35 @@ import kotlinx.coroutines.flow.map
  * @Date: 11/1/2024
  * Copyright (c) 2024 BanIT
  */
+class PreferencesManager private constructor(context: Context) {
 
-class PreferencesManager(private val context: Context) {
-
-    // Define the DataStore instance
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "app_preferences")
+    private val dataStore: DataStore<Preferences> = context.applicationContext.dataStore
 
     // Define keys for the stored values
     companion object {
         private val API_KEY = stringPreferencesKey("api_key")
+
+        // Singleton instance
+        private var instance: PreferencesManager? = null
+
+        // Thread-safe singleton instance creation
+        fun getInstance(context: Context): PreferencesManager {
+            return instance ?: synchronized(this) {
+                instance ?: PreferencesManager(context.applicationContext).also { instance = it }
+            }
+        }
     }
 
     // Save API Key
     suspend fun saveApiKey(apiKey: String) {
-        context.dataStore.edit { preferences ->
+        dataStore.edit { preferences ->
             preferences[API_KEY] = apiKey
         }
     }
 
     // Read API Key as a Flow
-    val apiKey: Flow<String?> = context.dataStore.data
+    val apiKey: Flow<String?> = dataStore.data
         .map { preferences ->
             preferences[API_KEY]
         }
