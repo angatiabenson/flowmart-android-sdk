@@ -6,7 +6,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import ke.co.banit.flowmartsdk.features.FlowMartScreen
+import ke.co.banit.flowmartsdk.features.category.CategoryListScreen
 import ke.co.banit.flowmartsdk.features.category.CategoryScreen
+import ke.co.banit.flowmartsdk.features.category.CreateCategoryScreen
+import ke.co.banit.flowmartsdk.features.category.UpdateCategoryScreen
 import ke.co.banit.flowmartsdk.features.product.ProductScreen
 import ke.co.banit.flowmartsdk.features.user.UserScreen
 
@@ -30,10 +33,20 @@ fun AppNavigation() {
         }
         composable(Screen.Category.route) {
             CategoryScreen(
-//                onCreateCategoryClicked = { navController.navigate(Screen.CreateCategory.route) },
-//                onFetchCategoryClicked = { navController.navigate(Screen.FetchCategory.route) }
+                onCreateCategoryClicked = { navController.navigate(Screen.CreateCategory.route) },
+                onFetchCategoryClicked = { navController.navigate(Screen.FetchCategory.route) }
             )
         }
+        composable(Screen.CreateCategory.route) {
+            CreateCategoryScreen()
+        }
+        composable(Screen.FetchCategory.route) {
+            CategoryListScreen()
+        }
+        composable(Screen.UpdateCategory.route) {
+            UpdateCategoryScreen()
+        }
+
         composable(Screen.Product.route) {
             ProductScreen()
         }
