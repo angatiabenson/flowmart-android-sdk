@@ -8,6 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import ke.co.banit.flowmartsdk.features.FlowMartScreen
 import ke.co.banit.flowmartsdk.features.category.CategoryListScreen
 import ke.co.banit.flowmartsdk.features.category.CategoryScreen
+import ke.co.banit.flowmartsdk.features.category.CategoryViewModel
 import ke.co.banit.flowmartsdk.features.category.CreateCategoryScreen
 import ke.co.banit.flowmartsdk.features.category.UpdateCategoryScreen
 import ke.co.banit.flowmartsdk.features.product.CreateProductScreen
@@ -25,7 +26,7 @@ import ke.co.banit.flowmartsdk.features.user.UserScreen
  */
 
 @Composable
-fun AppNavigation() {
+fun AppNavigation(categoryViewModel: CategoryViewModel) {
     val navController = rememberNavController()
 
     NavHost(navController = navController, startDestination = Screen.Main.route) {
@@ -43,7 +44,7 @@ fun AppNavigation() {
             )
         }
         composable(Screen.CreateCategory.route) {
-            CreateCategoryScreen()
+            CreateCategoryScreen(viewModel = categoryViewModel)
         }
         composable(Screen.FetchCategory.route) {
             CategoryListScreen()

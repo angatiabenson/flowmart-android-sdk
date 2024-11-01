@@ -1,10 +1,10 @@
 package ke.co.banit.flowmartsdk.data.remote
 
-import com.squareup.moshi.Moshi
 import ke.co.banit.flowmartsdk.data.remote.api.CategoryApiService
 import ke.co.banit.flowmartsdk.data.remote.api.ProductApiService
 import ke.co.banit.flowmartsdk.data.remote.api.UserApiService
 import ke.co.banit.flowmartsdk.util.Settings
+import ke.co.banit.flowmartsdk.util.createMoshi
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -40,7 +40,11 @@ internal object ApiClient {
             .build()
         return Retrofit.Builder()
             .baseUrl(baseUrl)
-            .addConverterFactory(MoshiConverterFactory.create(Moshi.Builder().build()))
+            .addConverterFactory(
+                MoshiConverterFactory.create(
+                    createMoshi()
+                )
+            )
             .client(client)
             .build()
     }

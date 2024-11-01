@@ -9,3 +9,9 @@
 
 # Retain classes annotated with @Keep to prevent obfuscation
 -keep @androidx.annotation.Keep class * { *; }
+
+
+-dontwarn okhttp3.**
+-keep class okhttp3.** { *; }
+-keep class okio.** { *; }
+-keepattributes *Annotation*

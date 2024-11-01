@@ -7,8 +7,8 @@ import ke.co.banit.flowmartsdk.data.models.response.user.UpdateUserProfileRespon
 import ke.co.banit.flowmartsdk.data.models.response.user.UserProfileResponse
 import ke.co.banit.flowmartsdk.data.remote.api.UserApiService
 import ke.co.banit.flowmartsdk.domain.repositories.UserRepository
-import ke.co.banit.flowmartsdk.exceptions.ApiException
 import ke.co.banit.flowmartsdk.util.Result
+import ke.co.banit.flowmartsdk.util.handleApiError
 import okhttp3.MultipartBody
 
 /**
@@ -36,10 +36,10 @@ internal class UserRepositoryImpl(private val userApiService: UserApiService) :
 
             val response = userApiService.registerUser(body = requestBody)
             if (response.isSuccessful) {
-                val result = response.body()!!
+                val result = response.body()?.data!!
                 Result.Success(result)
             } else {
-                Result.Error(ApiException(response.code(), response.message()))
+                handleApiError(response)
             }
         } catch (e: Exception) {
             Result.Error(e)
@@ -59,10 +59,10 @@ internal class UserRepositoryImpl(private val userApiService: UserApiService) :
 
             val response = userApiService.loginUser(body = requestBody)
             if (response.isSuccessful) {
-                val result = response.body()!!
+                val result = response.body()?.data!!
                 Result.Success(result)
             } else {
-                Result.Error(ApiException(response.code(), response.message()))
+                handleApiError(response)
             }
         } catch (e: Exception) {
             Result.Error(e)
@@ -73,10 +73,10 @@ internal class UserRepositoryImpl(private val userApiService: UserApiService) :
         return try {
             val response = userApiService.getUserProfile()
             if (response.isSuccessful) {
-                val result = response.body()!!
+                val result = response.body()?.data!!
                 Result.Success(result)
             } else {
-                Result.Error(ApiException(response.code(), response.message()))
+                handleApiError(response)
             }
         } catch (e: Exception) {
             Result.Error(e)
@@ -101,10 +101,10 @@ internal class UserRepositoryImpl(private val userApiService: UserApiService) :
 
             val response = userApiService.updateUserProfile(body = requestBody)
             if (response.isSuccessful) {
-                val result = response.body()!!
+                val result = response.body()?.data!!
                 Result.Success(result)
             } else {
-                Result.Error(ApiException(response.code(), response.message()))
+                handleApiError(response)
             }
         } catch (e: Exception) {
             Result.Error(e)
@@ -115,10 +115,10 @@ internal class UserRepositoryImpl(private val userApiService: UserApiService) :
         return try {
             val response = userApiService.deleteUserAccount()
             if (response.isSuccessful) {
-                val result = response.body()!!
+                val result = response.body()?.data!!
                 Result.Success(result)
             } else {
-                Result.Error(ApiException(response.code(), response.message()))
+                handleApiError(response)
             }
         } catch (e: Exception) {
             Result.Error(e)

@@ -1,5 +1,6 @@
 package ke.co.banit.flowmartsdk.data.remote.api
 
+import ke.co.banit.flowmartsdk.data.models.response.ApiResponse
 import ke.co.banit.flowmartsdk.data.models.response.user.DeleteUserResponse
 import ke.co.banit.flowmartsdk.data.models.response.user.LoginUserResponse
 import ke.co.banit.flowmartsdk.data.models.response.user.RegisterUserResponse
@@ -21,17 +22,17 @@ import retrofit2.http.PUT
 
 internal interface UserApiService {
     @POST("register")
-    suspend fun registerUser(@Body body: RequestBody): Response<RegisterUserResponse>
+    suspend fun registerUser(@Body body: RequestBody): Response<ApiResponse<RegisterUserResponse>>
 
     @POST("login")
-    suspend fun loginUser(@Body body: RequestBody): Response<LoginUserResponse>
+    suspend fun loginUser(@Body body: RequestBody): Response<ApiResponse<LoginUserResponse>>
 
     @GET("user")
-    suspend fun getUserProfile(): Response<UserProfileResponse>
+    suspend fun getUserProfile(): Response<ApiResponse<UserProfileResponse>>
 
     @PUT("user")
-    suspend fun updateUserProfile(@Body body: RequestBody): Response<UpdateUserProfileResponse>
+    suspend fun updateUserProfile(@Body body: RequestBody): Response<ApiResponse<UpdateUserProfileResponse>>
 
     @DELETE("user")
-    suspend fun deleteUserAccount(): Response<DeleteUserResponse>
+    suspend fun deleteUserAccount(): Response<ApiResponse<DeleteUserResponse>>
 }

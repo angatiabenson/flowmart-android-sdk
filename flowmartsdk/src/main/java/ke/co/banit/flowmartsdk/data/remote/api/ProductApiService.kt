@@ -1,5 +1,6 @@
 package ke.co.banit.flowmartsdk.data.remote.api
 
+import ke.co.banit.flowmartsdk.data.models.response.ApiResponse
 import ke.co.banit.flowmartsdk.data.models.response.product.CreateProductResponse
 import ke.co.banit.flowmartsdk.data.models.response.product.DeleteProductResponse
 import ke.co.banit.flowmartsdk.data.models.response.product.ProductsByCategoryResponse
@@ -21,20 +22,20 @@ import retrofit2.http.Path
  */
 internal interface ProductApiService {
     @GET("products")
-    suspend fun getAllProducts(): Response<ProductsListResponse>
+    suspend fun getAllProducts(): Response<ApiResponse<ProductsListResponse>>
 
     @POST("products")
-    suspend fun createProduct(@Body body: RequestBody): Response<CreateProductResponse>
+    suspend fun createProduct(@Body body: RequestBody): Response<ApiResponse<CreateProductResponse>>
 
     @GET("categories/{category_id}/products")
-    suspend fun getProductsByCategory(@Path("category_id") categoryId: Int): Response<ProductsByCategoryResponse>
+    suspend fun getProductsByCategory(@Path("category_id") categoryId: Int): Response<ApiResponse<ProductsByCategoryResponse>>
 
     @PUT("products/{id}")
     suspend fun updateProduct(
         @Path("id") id: Int,
         @Body product: RequestBody
-    ): Response<UpdateProductResponse>
+    ): Response<ApiResponse<UpdateProductResponse>>
 
     @DELETE("products/{id}")
-    suspend fun deleteProduct(@Path("id") id: Int): Response<DeleteProductResponse>
+    suspend fun deleteProduct(@Path("id") id: Int): Response<ApiResponse<DeleteProductResponse>>
 }

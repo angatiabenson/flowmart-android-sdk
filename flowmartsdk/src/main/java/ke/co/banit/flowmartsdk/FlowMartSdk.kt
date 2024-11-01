@@ -143,7 +143,7 @@ class FlowMartSdk private constructor(
         private lateinit var interceptor: AuthInterceptor
 
         private fun setupInterceptor() {
-            interceptor = AuthInterceptor(configuration?.apiKey!!)
+            interceptor = AuthInterceptor(configuration?.apiKey ?: "")
         }
 
         private fun <T, R : Any> createRepository(

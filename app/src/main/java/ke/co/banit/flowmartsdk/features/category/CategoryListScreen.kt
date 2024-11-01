@@ -11,9 +11,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -27,25 +25,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import ke.co.banit.flowmartsdk.data.models.dto.Category
 
 /**
  * @Author: Angatia Benson
  * @Date: 11/1/2024
  * Copyright (c) 2024 BanIT
  */
-data class Category(val id: Int, val name: String)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CategoryListScreen(
-) {
-    val categories = listOf(
-        Category(id = 1, name = "Electronics"),
-        Category(id = 2, name = "Books"),
-        Category(id = 3, name = "Home Appliances"),
-        Category(id = 4, name = "Fashion"),
-        Category(id = 5, name = "Toys"),
-    )
+fun CategoryListScreen() {
+    val categories = emptyList<Category>()
     Scaffold(
         topBar = {
             TopAppBar(
@@ -54,9 +45,8 @@ fun CategoryListScreen(
                         "Create Product Category",
                         style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold)
                     )
-                },
-
-                )
+                }
+            )
         },
         content = { paddingValues ->
             if (categories.isEmpty()) {

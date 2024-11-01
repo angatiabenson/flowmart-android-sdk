@@ -6,8 +6,8 @@ import ke.co.banit.flowmartsdk.data.models.response.category.DeleteCategoryRespo
 import ke.co.banit.flowmartsdk.data.models.response.category.UpdateCategoryResponse
 import ke.co.banit.flowmartsdk.data.remote.api.CategoryApiService
 import ke.co.banit.flowmartsdk.domain.repositories.CategoryRepository
-import ke.co.banit.flowmartsdk.exceptions.ApiException
 import ke.co.banit.flowmartsdk.util.Result
+import ke.co.banit.flowmartsdk.util.handleApiError
 import okhttp3.MultipartBody
 
 
@@ -22,10 +22,10 @@ internal class CategoryRepositoryImpl(private val categoryApiService: CategoryAp
         return try {
             val response = categoryApiService.getAllCategories()
             if (response.isSuccessful) {
-                val result = response.body()!!
+                val result = response.body()?.data!!
                 Result.Success(result)
             } else {
-                Result.Error(ApiException(response.code(), response.message()))
+                handleApiError(response)
             }
         } catch (e: Exception) {
             Result.Error(e)
@@ -34,7 +34,6 @@ internal class CategoryRepositoryImpl(private val categoryApiService: CategoryAp
 
     override suspend fun createCategory(name: String): Result<CreateCategoryResponse, Exception> {
         return try {
-
             val builder = MultipartBody.Builder()
             builder.setType(MultipartBody.FORM)
             builder.addFormDataPart("name", name)
@@ -42,10 +41,10 @@ internal class CategoryRepositoryImpl(private val categoryApiService: CategoryAp
 
             val response = categoryApiService.createCategory(body = requestBody)
             if (response.isSuccessful) {
-                val result = response.body()!!
+                val result = response.body()?.data!!
                 Result.Success(result)
             } else {
-                Result.Error(ApiException(response.code(), response.message()))
+                handleApiError(response)
             }
         } catch (e: Exception) {
             Result.Error(e)
@@ -64,10 +63,10 @@ internal class CategoryRepositoryImpl(private val categoryApiService: CategoryAp
 
             val response = categoryApiService.updateCategory(id = id, body = requestBody)
             if (response.isSuccessful) {
-                val result = response.body()!!
+                val result = response.body()?.data!!
                 Result.Success(result)
             } else {
-                Result.Error(ApiException(response.code(), response.message()))
+                handleApiError(response)
             }
         } catch (e: Exception) {
             Result.Error(e)
@@ -78,10 +77,10 @@ internal class CategoryRepositoryImpl(private val categoryApiService: CategoryAp
         return try {
             val response = categoryApiService.deleteCategory(id)
             if (response.isSuccessful) {
-                val result = response.body()!!
+                val result = response.body()?.data!!
                 Result.Success(result)
             } else {
-                Result.Error(ApiException(response.code(), response.message()))
+                handleApiError(response)
             }
         } catch (e: Exception) {
             Result.Error(e)

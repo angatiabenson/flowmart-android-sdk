@@ -7,8 +7,8 @@ import ke.co.banit.flowmartsdk.data.models.response.product.ProductsListResponse
 import ke.co.banit.flowmartsdk.data.models.response.product.UpdateProductResponse
 import ke.co.banit.flowmartsdk.data.remote.api.ProductApiService
 import ke.co.banit.flowmartsdk.domain.repositories.ProductRepository
-import ke.co.banit.flowmartsdk.exceptions.ApiException
 import ke.co.banit.flowmartsdk.util.Result
+import ke.co.banit.flowmartsdk.util.handleApiError
 import okhttp3.MultipartBody
 
 /**
@@ -22,10 +22,10 @@ internal class ProductRepositoryImpl(private val productApiService: ProductApiSe
         return try {
             val response = productApiService.getAllProducts()
             if (response.isSuccessful) {
-                val result = response.body()!!
+                val result = response.body()?.data!!
                 Result.Success(result)
             } else {
-                Result.Error(ApiException(response.code(), response.message()))
+                handleApiError(response)
             }
         } catch (e: Exception) {
             Result.Error(e)
@@ -48,10 +48,10 @@ internal class ProductRepositoryImpl(private val productApiService: ProductApiSe
 
             val response = productApiService.createProduct(body = requestBody)
             if (response.isSuccessful) {
-                val result = response.body()!!
+                val result = response.body()?.data!!
                 Result.Success(result)
             } else {
-                Result.Error(ApiException(response.code(), response.message()))
+                handleApiError(response)
             }
         } catch (e: Exception) {
             Result.Error(e)
@@ -62,10 +62,10 @@ internal class ProductRepositoryImpl(private val productApiService: ProductApiSe
         return try {
             val response = productApiService.getProductsByCategory(categoryId = categoryId)
             if (response.isSuccessful) {
-                val result = response.body()!!
+                val result = response.body()?.data!!
                 Result.Success(result)
             } else {
-                Result.Error(ApiException(response.code(), response.message()))
+                handleApiError(response)
             }
         } catch (e: Exception) {
             Result.Error(e)
@@ -88,10 +88,10 @@ internal class ProductRepositoryImpl(private val productApiService: ProductApiSe
 
             val response = productApiService.updateProduct(id = productId, product = requestBody)
             if (response.isSuccessful) {
-                val result = response.body()!!
+                val result = response.body()?.data!!
                 Result.Success(result)
             } else {
-                Result.Error(ApiException(response.code(), response.message()))
+                handleApiError(response)
             }
         } catch (e: Exception) {
             Result.Error(e)
@@ -102,10 +102,10 @@ internal class ProductRepositoryImpl(private val productApiService: ProductApiSe
         return try {
             val response = productApiService.deleteProduct(id = productId)
             if (response.isSuccessful) {
-                val result = response.body()!!
+                val result = response.body()?.data!!
                 Result.Success(result)
             } else {
-                Result.Error(ApiException(response.code(), response.message()))
+                handleApiError(response)
             }
         } catch (e: Exception) {
             Result.Error(e)

@@ -1,5 +1,6 @@
 package ke.co.banit.flowmartsdk.data.remote.api
 
+import ke.co.banit.flowmartsdk.data.models.response.ApiResponse
 import ke.co.banit.flowmartsdk.data.models.response.category.CategoriesListResponse
 import ke.co.banit.flowmartsdk.data.models.response.category.CreateCategoryResponse
 import ke.co.banit.flowmartsdk.data.models.response.category.DeleteCategoryResponse
@@ -21,17 +22,17 @@ import retrofit2.http.Path
 
 internal interface CategoryApiService {
     @GET("categories")
-    suspend fun getAllCategories(): Response<CategoriesListResponse>
+    suspend fun getAllCategories(): Response<ApiResponse<CategoriesListResponse>>
 
     @POST("categories")
-    suspend fun createCategory(@Body body: RequestBody): Response<CreateCategoryResponse>
+    suspend fun createCategory(@Body body: RequestBody): Response<ApiResponse<CreateCategoryResponse>>
 
     @PUT("categories/{id}")
     suspend fun updateCategory(
         @Path("id") id: Int,
         @Body body: RequestBody
-    ): Response<UpdateCategoryResponse>
+    ): Response<ApiResponse<UpdateCategoryResponse>>
 
     @DELETE("categories/{id}")
-    suspend fun deleteCategory(@Path("id") id: Int): Response<DeleteCategoryResponse>
+    suspend fun deleteCategory(@Path("id") id: Int): Response<ApiResponse<DeleteCategoryResponse>>
 }

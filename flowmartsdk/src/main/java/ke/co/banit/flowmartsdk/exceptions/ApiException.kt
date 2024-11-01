@@ -11,4 +11,4 @@ package ke.co.banit.flowmartsdk.exceptions
  * @property code The HTTP status code of the error.
  * @property message A descriptive message detailing the error.
  */
-class ApiException(val code: Int, message: String) : Exception(message)
+class ApiException(val code: Int, message: String?) : Exception(message)

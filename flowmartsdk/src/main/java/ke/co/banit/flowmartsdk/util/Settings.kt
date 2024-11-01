@@ -21,5 +21,5 @@ internal object Settings {
      */
     const val WRITE_TIMEOUT: Long = 60 * 1000
 
-    const val BASE_URL = "https://flowmart.co.ke/"
+    const val BASE_URL = "https://flowmart.banit.co.ke/"
 }

@@ -15,6 +15,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,6 +24,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import ke.co.banit.flowmartsdk.features.components.LoadingDialog
+import ke.co.banit.flowmartsdk.features.components.MessageDialog
 
 /**
  * @Author: Angatia Benson
@@ -31,9 +34,11 @@ import androidx.compose.ui.unit.dp
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreateCategoryScreen() {
+fun CreateCategoryScreen(viewModel: CategoryViewModel) {
     var categoryName by remember { mutableStateOf("") }
     val isSubmitEnabled = categoryName.isNotBlank()
+    val uiState by viewModel.uiState.collectAsState()
+
 
     Scaffold(
         topBar = {
@@ -67,7 +72,9 @@ fun CreateCategoryScreen() {
                 )
 
                 Button(
-                    onClick = { },
+                    onClick = {
+                        viewModel.createCategory(categoryName)
+                    },
                     enabled = isSubmitEnabled,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -79,6 +86,27 @@ fun CreateCategoryScreen() {
                         style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold)
                     )
                 }
+            }
+
+            // Show Loading Dialog if loading
+            LoadingDialog(isLoading = uiState.isLoading)
+
+            uiState.successMessage?.let { successMessage ->
+                MessageDialog(
+                    message = successMessage,
+                    onDismiss = {
+                        viewModel.resetUiState()
+                    },
+                    isError = false
+                )
+            }
+
+            uiState.errorMessage?.let { errorMessage ->
+                MessageDialog(
+                    message = errorMessage,
+                    onDismiss = { viewModel.resetUiState() },
+                    isError = true
+                )
             }
         }
     )
