@@ -33,6 +33,7 @@ import ke.co.banit.flowmartsdk.domain.usecases.user.GetUserProfileUseCase
 import ke.co.banit.flowmartsdk.domain.usecases.user.LoginUserUseCase
 import ke.co.banit.flowmartsdk.domain.usecases.user.RegisterUserUseCase
 import ke.co.banit.flowmartsdk.domain.usecases.user.UpdateUserProfileUseCase
+import ke.co.banit.flowmartsdk.util.Environment
 import ke.co.banit.flowmartsdk.util.FlowMartConfiguration
 import ke.co.banit.flowmartsdk.util.Result
 import ke.co.banit.flowmartsdk.util.Settings
@@ -67,8 +68,7 @@ class FlowMartSdk private constructor(
         createCategoryUseCase.value.invoke(categoryName)
 
     suspend fun updateCategory(
-        categoryId: Int,
-        categoryName: String
+        categoryId: Int, categoryName: String
     ): Result<UpdateCategoryResponse, Exception> =
         updateCategoryUseCase.value.invoke(categoryId, categoryName)
 
@@ -87,18 +87,13 @@ class FlowMartSdk private constructor(
 
 
     suspend fun createProduct(
-        categoryId: Int,
-        productName: String,
-        quantity: String
+        categoryId: Int, productName: String, quantity: String
     ): Result<CreateProductResponse, Exception> =
         createProductUseCase.value.invoke(categoryId, productName, quantity)
 
 
     suspend fun updateProduct(
-        productId: Int,
-        categoryId: Int,
-        productName: String,
-        quantity: String
+        productId: Int, categoryId: Int, productName: String, quantity: String
     ): Result<UpdateProductResponse, Exception> =
         updateProductUseCase.value.invoke(productId, categoryId, productName, quantity)
 
@@ -109,10 +104,7 @@ class FlowMartSdk private constructor(
 
     // User Methods
     suspend fun registerUser(
-        name: String,
-        email: String,
-        phone: String,
-        password: String
+        name: String, email: String, phone: String, password: String
     ): Result<RegisterUserResponse, Exception> =
         registerUserUseCase.value.invoke(name, email, phone, password)
 
@@ -125,10 +117,7 @@ class FlowMartSdk private constructor(
 
 
     suspend fun updateUserProfile(
-        name: String?,
-        email: String?,
-        phone: String?,
-        password: String?
+        name: String?, email: String?, phone: String?, password: String?
     ): Result<UpdateUserProfileResponse, Exception> =
         updateUserProfileUseCase.value.invoke(name, email, phone, password)
 
@@ -141,25 +130,27 @@ class FlowMartSdk private constructor(
 
         private var configuration: FlowMartConfiguration? = null
         private lateinit var interceptor: AuthInterceptor
+        private var environment: Environment = Environment.PRODUCTION
 
         private fun setupInterceptor() {
             interceptor = AuthInterceptor(configuration?.apiKey ?: "")
         }
 
         private fun <T, R : Any> createRepository(
-            serviceCreator: (String, AuthInterceptor) -> T,
-            repositoryFactory: (T) -> R
+            serviceCreator: (String, AuthInterceptor, Environment) -> T, repositoryFactory: (T) -> R
         ): R {
             val baseUrl = configuration?.baseUrl ?: Settings.BASE_URL
-            val service = serviceCreator(baseUrl, interceptor)
+            val service = serviceCreator(baseUrl, interceptor, environment)
             return repositoryFactory(service)
         }
 
-        fun configure(configuration: FlowMartConfiguration): Builder =
-            apply {
-                this.configuration = configuration
-                setupInterceptor()
-            }
+        fun configure(
+            configuration: FlowMartConfiguration, environment: Environment = Environment.PRODUCTION
+        ): Builder = apply {
+            this.environment = environment
+            this.configuration = configuration
+            setupInterceptor()
+        }
 
         fun build(): FlowMartSdk {
             val categoryRepository = createRepository(
@@ -193,8 +184,7 @@ class FlowMartSdk private constructor(
             val updateUserProfileUseCase = UpdateUserProfileUseCase(userRepository)
             val deleteUserAccountUseCase = DeleteUserAccountUseCase(userRepository)
 
-            val flowMartSdk = FlowMartSdk(
-                getCategoriesUseCase = lazy { getCategoriesUseCase },
+            val flowMartSdk = FlowMartSdk(getCategoriesUseCase = lazy { getCategoriesUseCase },
                 createCategoryUseCase = lazy { createCategoryUseCase },
                 updateCategoryUseCase = lazy { updateCategoryUseCase },
                 deleteCategoryUseCase = lazy { deleteCategoryUseCase },
@@ -207,8 +197,7 @@ class FlowMartSdk private constructor(
                 loginUserUseCase = lazy { loginUserUseCase },
                 getUserProfileUseCase = lazy { getUserProfileUseCase },
                 updateUserProfileUseCase = lazy { updateUserProfileUseCase },
-                deleteUserAccountUseCase = lazy { deleteUserAccountUseCase }
-            )
+                deleteUserAccountUseCase = lazy { deleteUserAccountUseCase })
 
             return flowMartSdk
         }

@@ -3,6 +3,7 @@ package ke.co.banit.flowmartsdk.data.remote
 import ke.co.banit.flowmartsdk.data.remote.api.CategoryApiService
 import ke.co.banit.flowmartsdk.data.remote.api.ProductApiService
 import ke.co.banit.flowmartsdk.data.remote.api.UserApiService
+import ke.co.banit.flowmartsdk.util.Environment
 import ke.co.banit.flowmartsdk.util.Settings
 import ke.co.banit.flowmartsdk.util.createMoshi
 import okhttp3.Interceptor
@@ -19,25 +20,43 @@ import java.util.concurrent.TimeUnit
  */
 internal object ApiClient {
 
-    fun getCategoryAPIService(baseUrl: String, interceptor: Interceptor): CategoryApiService =
-        getRetrofit(baseUrl, interceptor).create(CategoryApiService::class.java)
+    fun getCategoryAPIService(
+        baseUrl: String,
+        interceptor: Interceptor,
+        environment: Environment
+    ): CategoryApiService =
+        getRetrofit(baseUrl, interceptor, environment).create(CategoryApiService::class.java)
 
-    fun getProductAPIService(baseUrl: String, interceptor: Interceptor): ProductApiService =
-        getRetrofit(baseUrl, interceptor).create(ProductApiService::class.java)
+    fun getProductAPIService(
+        baseUrl: String,
+        interceptor: Interceptor,
+        environment: Environment
+    ): ProductApiService =
+        getRetrofit(baseUrl, interceptor, environment).create(ProductApiService::class.java)
 
-    fun getUserAPIService(baseUrl: String, interceptor: Interceptor): UserApiService =
-        getRetrofit(baseUrl, interceptor).create(UserApiService::class.java)
+    fun getUserAPIService(
+        baseUrl: String,
+        interceptor: Interceptor,
+        environment: Environment
+    ): UserApiService =
+        getRetrofit(baseUrl, interceptor, environment).create(UserApiService::class.java)
 
-    private fun getRetrofit(baseUrl: String, interceptor: Interceptor): Retrofit {
+    private fun getRetrofit(
+        baseUrl: String,
+        interceptor: Interceptor,
+        environment: Environment
+    ): Retrofit {
         val httpLoggingInterceptor =
             HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
         val builder = OkHttpClient.Builder()
-        val client = builder.connectTimeout(Settings.CONNECT_TIMEOUT, TimeUnit.SECONDS)
+            .connectTimeout(Settings.CONNECT_TIMEOUT, TimeUnit.SECONDS)
             .writeTimeout(Settings.WRITE_TIMEOUT, TimeUnit.SECONDS)
             .readTimeout(Settings.READ_TIMEOUT, TimeUnit.SECONDS)
-            .addInterceptor(httpLoggingInterceptor)
             .addInterceptor(interceptor)
-            .build()
+        if (environment == Environment.DEVELOPMENT) {
+            builder.addInterceptor(httpLoggingInterceptor)
+        }
+        val client = builder.build()
         return Retrofit.Builder()
             .baseUrl(baseUrl)
             .addConverterFactory(

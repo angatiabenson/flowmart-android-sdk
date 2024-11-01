@@ -14,7 +14,8 @@ fun initializeSdk(apiKey: String? = null): FlowMartSdk {
         .configure(
             configuration = FlowMartConfiguration(
                 apiKey = apiKey
-            )
+            ),
+            environment = Environment.DEVELOPMENT
         )
         .build()
 }
