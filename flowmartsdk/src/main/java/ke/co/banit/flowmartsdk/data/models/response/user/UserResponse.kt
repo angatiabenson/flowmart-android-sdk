@@ -1,6 +1,6 @@
-package ke.co.banit.flowmartsdk.data.models.response.product
+package ke.co.banit.flowmartsdk.data.models.response.user
 
-import ke.co.banit.flowmartsdk.data.models.dto.Product
+import ke.co.banit.flowmartsdk.data.models.dto.User
 
 /**
  *  FlowMart SDK
@@ -22,12 +22,13 @@ import ke.co.banit.flowmartsdk.data.models.dto.Product
  */
 
 /**
- * Represents the response received after updating a [Product] in the FlowMart API.
+ * Represents the response containing details about a [User] in the FlowMart API.
  *
- * @property message A message from the server indicating the success or status of the product update operation.
- * @property product The updated [Product] object, reflecting the latest changes made.
+ * @property message A message from the server indicating the success or status of the operation.
+ * @property user The [User] object containing detailed information about the specified user.
  */
-data class UpdateProductResponse(
-    val message: String,
-    val product: Product
+data class UserResponse(
+    val message: String?,
+    val user: User
 )
+
