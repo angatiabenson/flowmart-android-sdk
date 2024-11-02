@@ -1,4 +1,4 @@
-package ke.co.banit.flowmartsdk.features.product
+package ke.co.banit.flowmartsdk.features.category
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,20 +21,19 @@ import ke.co.banit.flowmartsdk.features.components.ProductList
 
 /**
  * @Author: Angatia Benson
- * @Date: 11/1/2024
+ * @Date: 11/2/2024
  * Copyright (c) 2024 BanIT
  */
-
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProductListScreen(
-    viewModel: ProductViewModel
+fun ProductByCategoryScreen(
+    viewModel: CategoryViewModel,
+    productId: Int?
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
     LaunchedEffect(Unit) {
-        viewModel.fetchProducts()
+        viewModel.fetchProductsByCategory(productId ?: 0)
     }
     DisposableEffect(Unit) {
         onDispose {
@@ -46,7 +45,7 @@ fun ProductListScreen(
             TopAppBar(
                 title = {
                     Text(
-                        "Products",
+                        "Products By Category",
                         style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold)
                     )
                 },
@@ -63,18 +62,16 @@ fun ProductListScreen(
                     Text("Loading...")
                 }
             } else {
-                if (uiState.products.isNotEmpty()) {
-                    ProductList(
-                        modifier = Modifier.padding(paddingValues), products = uiState.products
-                    )
-                }
+                ProductList(
+                    modifier = Modifier.padding(paddingValues), products = uiState.products
+                )
+
                 uiState.errorMessage?.let { errorMessage ->
                     ErrorView(modifier = Modifier.padding(paddingValues),
                         text = errorMessage,
-                        onRetry = { viewModel.fetchProducts() })
+                        onRetry = { viewModel.fetchProductsByCategory(productId ?: 0) })
                 }
             }
         }
     )
 }
-

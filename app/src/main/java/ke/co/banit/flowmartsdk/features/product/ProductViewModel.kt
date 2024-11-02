@@ -1,4 +1,4 @@
-package ke.co.banit.flowmartsdk.features.category
+package ke.co.banit.flowmartsdk.features.product
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -14,23 +14,24 @@ import kotlinx.coroutines.launch
 
 /**
  * @Author: Angatia Benson
- * @Date: 11/1/2024
+ * @Date: 11/2/2024
  * Copyright (c) 2024 BanIT
  */
-class CategoryViewModel(application: Application) : AndroidViewModel(application) {
-    private val _uiState = MutableStateFlow(CategoryUiState())
-    val uiState: StateFlow<CategoryUiState> = _uiState
+
+class ProductViewModel(application: Application) : AndroidViewModel(application) {
+    private val _uiState = MutableStateFlow(ProductUiState())
+    val uiState: StateFlow<ProductUiState> = _uiState
 
     private val preferencesManager = PreferencesManager.getInstance(application)
 
-    // Create category
-    fun createCategory(name: String) {
+    // Create product
+    fun createProduct(name: String, categoryId: Int, quantity: String) {
         _uiState.value = _uiState.value.copy(isLoading = true)
 
         viewModelScope.launch {
             val apiKey = preferencesManager.apiKey.first()
             val sdk = initializeSdk(apiKey)
-            sdk.createCategory(name)
+            sdk.createProduct(categoryId, name, quantity)
                 .onSuccess { response ->
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
@@ -40,91 +41,20 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
                 .onError { exception ->
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
-                        errorMessage = "Failed to create category: ${exception.message}"
+                        errorMessage = "Failed to create product: ${exception.message}"
                     )
                 }
         }
     }
 
-    // Fetch categories
-    fun fetchCategories() {
+    // Fetch products
+    fun fetchProducts() {
         _uiState.value = _uiState.value.copy(isLoading = true)
 
         viewModelScope.launch {
             val apiKey = preferencesManager.apiKey.first()
             val sdk = initializeSdk(apiKey)
-            sdk.getCategories()
-                .onSuccess { categories ->
-                    _uiState.value = _uiState.value.copy(
-                        isLoading = false,
-                        categories = categories.categories
-                    )
-                }
-                .onError { exception ->
-                    exception.printStackTrace()
-                    _uiState.value = _uiState.value.copy(
-                        isLoading = false,
-                        errorMessage = "Failed to fetch categories: ${exception.message}"
-                    )
-                }
-        }
-    }
-
-    // Update category
-    fun updateCategory(categoryId: Int, newName: String) {
-        _uiState.value = _uiState.value.copy(isLoading = true)
-
-        viewModelScope.launch {
-            val apiKey = preferencesManager.apiKey.first()
-            val sdk = initializeSdk(apiKey)
-            sdk.updateCategory(categoryId, newName)
-                .onSuccess {
-                    _uiState.value = _uiState.value.copy(
-                        isLoading = false,
-                        successMessage = "Category updated successfully!",
-                    )
-                }
-                .onError { exception ->
-                    _uiState.value = _uiState.value.copy(
-                        isLoading = false,
-                        errorMessage = "Failed to update category: ${exception.message}"
-                    )
-                }
-        }
-    }
-
-    // Delete category
-    fun deleteCategory(categoryId: Int) {
-        _uiState.value = _uiState.value.copy(isLoading = true)
-
-        viewModelScope.launch {
-            val apiKey = preferencesManager.apiKey.first()
-            val sdk = initializeSdk(apiKey)
-            sdk.deleteCategory(categoryId)
-                .onSuccess {
-                    _uiState.value = _uiState.value.copy(
-                        isLoading = false,
-                        successMessage = "Category deleted successfully!"
-                    )
-                    fetchCategories() // Refresh list after deletion
-                }
-                .onError { exception ->
-                    _uiState.value = _uiState.value.copy(
-                        isLoading = false,
-                        errorMessage = "Failed to delete category: ${exception.message}"
-                    )
-                }
-        }
-    }
-
-    // Delete category
-    fun fetchProductsByCategory(categoryId: Int) {
-        _uiState.value = _uiState.value.copy(isLoading = true)
-
-        viewModelScope.launch {
-            val apiKey = preferencesManager.apiKey.first()
-            val sdk = initializeSdk(apiKey)
-            sdk.getProductsByCategory(categoryId)
+            sdk.getProducts()
                 .onSuccess { response ->
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
@@ -134,7 +64,54 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
                 .onError { exception ->
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
-                        errorMessage = "Failed to fetch products by category: ${exception.message}"
+                        errorMessage = "Failed to fetch products: ${exception.message}"
+                    )
+                }
+        }
+    }
+
+    // Update product
+    fun updateProduct(productId: Int, name: String, categoryId: Int, quantity: String) {
+        _uiState.value = _uiState.value.copy(isLoading = true)
+
+        viewModelScope.launch {
+            val apiKey = preferencesManager.apiKey.first()
+            val sdk = initializeSdk(apiKey)
+            sdk.updateProduct(productId, categoryId, name, quantity)
+                .onSuccess {
+                    _uiState.value = _uiState.value.copy(
+                        isLoading = false,
+                        successMessage = "Product updated successfully!"
+                    )
+                }
+                .onError { exception ->
+                    _uiState.value = _uiState.value.copy(
+                        isLoading = false,
+                        errorMessage = "Failed to update product: ${exception.message}"
+                    )
+                }
+        }
+    }
+
+    // Delete product
+    fun deleteProduct(productId: Int) {
+        _uiState.value = _uiState.value.copy(isLoading = true)
+
+        viewModelScope.launch {
+            val apiKey = preferencesManager.apiKey.first()
+            val sdk = initializeSdk(apiKey)
+            sdk.deleteProduct(productId)
+                .onSuccess {
+                    _uiState.value = _uiState.value.copy(
+                        isLoading = false,
+                        successMessage = "Product deleted successfully!"
+                    )
+                    fetchProducts() // Refresh list after deletion
+                }
+                .onError { exception ->
+                    _uiState.value = _uiState.value.copy(
+                        isLoading = false,
+                        errorMessage = "Failed to delete product: ${exception.message}"
                     )
                 }
         }
@@ -142,6 +119,9 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
 
     // Reset UI state (for dismissing messages)
     fun resetUiState() {
-        _uiState.value = CategoryUiState(categories = _uiState.value.categories)
+        _uiState.value = ProductUiState(
+            categories = _uiState.value.categories,
+            products = _uiState.value.products
+        )
     }
 }

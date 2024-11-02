@@ -40,7 +40,7 @@ import ke.co.banit.flowmartsdk.features.components.ErrorView
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CategoryListScreen(viewModel: CategoryViewModel) {
+fun CategoryListScreen(viewModel: CategoryViewModel, onProductClick: (Int) -> Unit) {
     LaunchedEffect(Unit) {
         viewModel.fetchCategories()
     }
@@ -71,7 +71,9 @@ fun CategoryListScreen(viewModel: CategoryViewModel) {
         } else {
             if (uiState.categories.isNotEmpty()) {
                 DisplayCategoryList(
-                    modifier = Modifier.padding(paddingValues), categories = uiState.categories
+                    modifier = Modifier.padding(paddingValues),
+                    categories = uiState.categories,
+                    onProductClick = onProductClick
                 )
             }
             uiState.errorMessage?.let { errorMessage ->
@@ -84,7 +86,11 @@ fun CategoryListScreen(viewModel: CategoryViewModel) {
 }
 
 @Composable
-fun DisplayCategoryList(modifier: Modifier = Modifier, categories: List<Category>) {
+fun DisplayCategoryList(
+    modifier: Modifier = Modifier,
+    categories: List<Category>,
+    onProductClick: (Int) -> Unit
+) {
     if (categories.isEmpty()) {
         // Show a loading indicator or "no categories" message if the list is empty
         Box(
@@ -102,7 +108,9 @@ fun DisplayCategoryList(modifier: Modifier = Modifier, categories: List<Category
                 CategoryListItem(category = category,
                     onDeleteCategory = {},
                     onEditCategory = {},
-                    onViewProductsInCategory = {})
+                    onViewProductsInCategory = {
+                        onProductClick(it.id)
+                    })
                 HorizontalDivider()
             }
         }

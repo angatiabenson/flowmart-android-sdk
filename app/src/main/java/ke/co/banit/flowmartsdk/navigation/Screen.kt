@@ -10,9 +10,15 @@ sealed class Screen(val route: String) {
     data object Category : Screen("category")
     data object Product : Screen("product")
     data object User : Screen("user")
+
     data object CreateCategory : Screen("category/create_category")
     data object FetchCategory : Screen("category/fetch_category")
     data object UpdateCategory : Screen("category/update_category")
+    data object ProductByCategory : Screen("category/product_category/{categoryId}") {
+        fun createRoute(categoryId: Int) = "category/product_category/$categoryId"
+    }
+
+
     data object CreateProduct : Screen("product/create_product")
     data object FetchProduct : Screen("product/fetch_product")
     data object UpdateProduct : Screen("product/update_product")
