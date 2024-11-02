@@ -1,8 +1,11 @@
+import com.vanniktech.maven.publish.SonatypeHost
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.plugin.serialization)
     alias(libs.plugins.devtools.ksp)
+    id("com.vanniktech.maven.publish") version "0.30.0"
 }
 
 android {
@@ -11,13 +14,15 @@ android {
 
     defaultConfig {
         minSdk = 24
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
-        release {
+        getByName("debug") {
+            // Debug-specific configurations
+        }
+        getByName("release") {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -34,8 +39,38 @@ android {
     }
 }
 
-dependencies {
+mavenPublishing {
+    coordinates("io.github.angatiabenson", "flowmartsdk", "0.0.1")
 
+    pom {
+        name.set("Flowmart SDK")
+        description.set("SDK for interacting with the FlowMart API, providing comprehensive functionality for managing categories, products, and user accounts.")
+        inceptionYear.set("2024")
+        url.set("https://github.com/angatiabenson/flowmartsdk")
+
+        licenses {
+            license {
+                name.set("The Apache License, Version 2.0")
+                url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+            }
+        }
+        developers {
+            developer {
+                id.set("angatiabenson")
+                name.set("Angatia Benson")
+                email.set("bensonetia@gmail.com")
+            }
+        }
+        scm {
+            url.set("https://github.com/angatiabenson/flowmartsdk")
+        }
+    }
+
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+    signAllPublications()
+}
+
+dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
